@@ -1,0 +1,7 @@
+[
+  { "username": "admin", "password": "admin123", "name": "Admin VJU", "role": "admin" },
+  { "username": "lecturer1", "password": "pass123", "name": "TS. Alan Turing", "role": "lecturer" },
+  { "username": "lecturer2", "password": "pass123", "name": "PGS. Marie Curie", "role": "lecturer" },
+  { "username": "student1", "password": "pass123", "name": "Mai The Toan", "role": "student" },
+  { "username": "23110328@st.vju.ac.vn", "password": "password123", "name": "Dương Văn Quang", "role": "student" }
+]
