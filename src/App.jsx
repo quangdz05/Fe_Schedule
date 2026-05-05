@@ -16,6 +16,14 @@ export default function App() {
   const [language, setLanguage] = useState("Vietnamese");
 
   const normalizeRole = (value) => String(value || "").toLowerCase();
+  const getAllowedNavItems = (role) => {
+    if (role === "admin") return NAV_ITEMS;
+    if (role === "teacher") return NAV_ITEMS.filter((item) => item !== "User Management");
+    if (role === "student") {
+      return NAV_ITEMS.filter((item) => item !== "User Management" && item !== "Grade");
+    }
+    return NAV_ITEMS.filter((item) => item !== "User Management");
+  };
 
   const translateNav = (item, lang) => {
     if (lang === "English") return item;
@@ -23,7 +31,7 @@ export default function App() {
       "Grade": "Thông tin",
       "Scheduling": "Xếp lịch",
       "Change password": "Đổi mật khẩu",
-      "User Management": "Tạo tài khoản",
+      "User Management": "Tạo tài khoản nguoi dung",
       "User Guide For Student": "Hướng dẫn cho Sinh viên"
     };
     return dict[item] || item;
@@ -31,8 +39,10 @@ export default function App() {
 
   const handleLogin = (loggedInUser) => {
     setUser(loggedInUser);
-    const isAdmin = normalizeRole(loggedInUser?.role) === "admin";
-    setActivePage(isAdmin ? "User Management" : "Scheduling");
+    const role = normalizeRole(loggedInUser?.role);
+    const allowed = getAllowedNavItems(role);
+    const preferred = role === "admin" ? "User Management" : "Scheduling";
+    setActivePage(allowed.includes(preferred) ? preferred : allowed[0]);
   };
 
   const handleLogout = () => {
@@ -45,11 +55,9 @@ export default function App() {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
-  const isAdmin = normalizeRole(user?.role) === "admin";
-  const allowedNavItems = NAV_ITEMS.filter((item) => {
-    if (item === "User Management") return isAdmin;
-    return true;
-  });
+  const role = normalizeRole(user?.role);
+  const isAdmin = role === "admin";
+  const allowedNavItems = getAllowedNavItems(role);
 
   // Logged in → show main app
   return (
@@ -64,7 +72,7 @@ export default function App() {
               <button
                 className={`nav-btn${activePage === item ? " nav-btn-active" : ""}`}
                 type="button"
-                onClick={() => (item === "Grade" || item === "Scheduling" || item === "Change password" || item === "User Management") && setActivePage(item)}
+                onClick={() => setActivePage(item)}
               >
                 {translateNav(item, language)}
               </button>
@@ -89,10 +97,16 @@ export default function App() {
 
       {/* ═══ Content ═══ */}
       <main className="content">
-        {activePage === "Grade" && <GradeForm user={user} language={language} />}
-        {activePage === "Scheduling" && <SchedulingSystem />}
-        {activePage === "Change password" && <ChangePassword user={user} language={language} />}
-        {activePage === "User Management" && isAdmin && (
+        {activePage === "Grade" && allowedNavItems.includes("Grade") && (
+          <GradeForm user={user} language={language} />
+        )}
+        {activePage === "Scheduling" && allowedNavItems.includes("Scheduling") && (
+          <SchedulingSystem />
+        )}
+        {activePage === "Change password" && allowedNavItems.includes("Change password") && (
+          <ChangePassword user={user} language={language} />
+        )}
+        {activePage === "User Management" && isAdmin && allowedNavItems.includes("User Management") && (
           <UserManagement user={user} language={language} />
         )}
       </main>

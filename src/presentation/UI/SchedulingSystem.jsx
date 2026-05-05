@@ -1,13 +1,108 @@
 import { useState } from "react";
-import { rooms, timeSlots, courses } from "../../data";
-import { solveSchedule, transformToApiFormat } from "../../services/scheduleService";
+import { getScheduleResult, solveSchedule } from "../../services/scheduleService";
 import { RoomTypeLabels, DeliveryModeLabels } from "../../constants/enums";
 
 export default function SchedulingSystem() {
+  const [rooms, setRooms] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [scheduleRaw, setScheduleRaw] = useState(null);
+  const [scenarioId, setScenarioId] = useState("");
+  const [isLoadingData, setIsLoadingData] = useState(false);
+  const [dataMessage, setDataMessage] = useState(null);
   const [assignments, setAssignments] = useState({});
   const [isSolving, setIsSolving] = useState(false);
   const [solveMessage, setSolveMessage] = useState(null);
   const [apiScore, setApiScore] = useState(null);
+
+  const dayLabels = {
+    0: "Chủ Nhật",
+    1: "Thứ 2",
+    2: "Thứ 3",
+    3: "Thứ 4",
+    4: "Thứ 5",
+    5: "Thứ 6",
+    6: "Thứ 7",
+  };
+
+  const formatTime = (value) => {
+    if (!value) return "";
+    const raw = String(value);
+    const timePart = raw.includes("T") ? raw.split("T")[1] : raw;
+    return timePart.slice(0, 5);
+  };
+
+  const inferShift = (timeValue) => {
+    const hour = Number(String(timeValue || "0").slice(0, 2));
+    return hour < 12 ? "Sáng" : "Chiều";
+  };
+
+  const applyScheduleData = (schedule) => {
+    if (!schedule) return;
+
+    const teacherMap = new Map((schedule.teachers || []).map((t) => [t.id, t]));
+    const subjectMap = new Map((schedule.subjects || []).map((s) => [s.id, s]));
+    const groupMap = new Map((schedule.studentGroups || []).map((g) => [g.id, g]));
+
+    const uiRooms = (schedule.rooms || []).map((room) => ({
+      id: room.id,
+      name: room.name || `Phòng ${room.id}`,
+      capacity: room.capacity ?? 0,
+      roomType: room.roomType ?? 0,
+      deliveryMode: 0,
+      icon: room.name && String(room.name).toLowerCase().includes("zoom") ? "🌐" : "🏫",
+    }));
+
+    const uiTimeSlots = (schedule.timeSlots || []).map((slot) => {
+      const startTime = formatTime(slot.startTime);
+      const endTime = formatTime(slot.endTime);
+      const timeRange = startTime && endTime ? `${startTime}-${endTime}` : "";
+      return {
+        id: slot.id,
+        day: dayLabels[slot.dayOfWeek] || "Thứ 2",
+        shift: inferShift(startTime),
+        time: timeRange,
+      };
+    });
+
+    const uiCourses = (schedule.lessons || []).map((lesson) => {
+      const teacher = teacherMap.get(lesson.teacherId);
+      const subject = subjectMap.get(lesson.subjectId);
+      const group = groupMap.get(lesson.studentGroupId);
+      return {
+        id: String(lesson.id),
+        name: subject?.name || `Môn ${lesson.subjectId}`,
+        lecturer: teacher?.name || `GV ${lesson.teacherId}`,
+        lecturerIcon: "👨‍🏫",
+        classGroup: group?.name || `Lớp ${lesson.studentGroupId}`,
+        students: group?.size ?? 0,
+        requiredRoomType: lesson.requiredRoomType ?? subject?.requiredRoomType ?? 0,
+        deliveryMode: lesson.deliveryMode ?? 0,
+      };
+    });
+
+    const newAssignments = {};
+    (schedule.lessons || []).forEach((lesson) => {
+      if (lesson.roomId != null && lesson.timeSlotId != null) {
+        newAssignments[String(lesson.id)] = {
+          timeSlotId: lesson.timeSlotId,
+          roomId: lesson.roomId,
+        };
+      }
+    });
+
+    setRooms(uiRooms);
+    setTimeSlots(uiTimeSlots);
+    setCourses(uiCourses);
+    setAssignments(newAssignments);
+    setScheduleRaw(schedule);
+
+    const hScore = schedule.hardScore ?? 0;
+    const sScore = schedule.softScore ?? 0;
+    if (schedule.lessons && schedule.lessons.length > 0) {
+      setApiScore({ hard: hScore, soft: sScore });
+    }
+  };
 
   // Build cell lookup: key = "timeSlotId-roomId" → course object
   const cellLookup = {};
@@ -18,38 +113,69 @@ export default function SchedulingSystem() {
   const assignedIds = new Set(Object.keys(assignments));
   const unscheduled = courses.filter((c) => !assignedIds.has(c.id));
 
+  const handleLoad = async () => {
+    const trimmedId = scenarioId.trim();
+    if (!trimmedId) {
+      setDataMessage({ type: "error", text: "Vui lòng nhập scenarioId để tải dữ liệu." });
+      return;
+    }
+
+    setIsLoadingData(true);
+    setDataMessage(null);
+    setSolveMessage(null);
+    try {
+      const result = await getScheduleResult(trimmedId);
+      const schedule = result?.schedule || result;
+
+      if (!schedule || !schedule.lessons) {
+        throw new Error("API không trả về dữ liệu hợp lệ.");
+      }
+
+      applyScheduleData(schedule);
+      if (result?.scenarioId) {
+        setScenarioId(result.scenarioId);
+      }
+      setDataMessage({ type: "success", text: "Đã tải dữ liệu từ API." });
+    } catch (err) {
+      setDataMessage({ type: "error", text: `Lỗi tải dữ liệu: ${err.message}` });
+    } finally {
+      setIsLoadingData(false);
+    }
+  };
+
   /* ─── Gọi API để xếp lịch ─── */
   const handleSolve = async () => {
+    if (!scheduleRaw) {
+      setSolveMessage({ type: "error", text: "Chưa có dữ liệu. Vui lòng tải dữ liệu trước." });
+      return;
+    }
+
+    const trimmedId = scenarioId.trim() || `scenario-${Date.now()}`;
+
     setIsSolving(true);
     setSolveMessage(null);
     setApiScore(null);
     try {
-      const { request, reverseRoomMap, reverseSlotMap, lessonCourseMap } = 
-        transformToApiFormat("scenario-" + Date.now(), rooms, timeSlots, courses);
-      
+      const request = {
+        scenarioId: trimmedId,
+        schedule: scheduleRaw,
+        saveScenario: true,
+        saveResult: true,
+      };
+
       const result = await solveSchedule(request);
-      
-      if (result && result.schedule && result.schedule.lessons) {
-        const newAssignments = {};
-        result.schedule.lessons.forEach(lesson => {
-          if (lesson.roomId && lesson.timeSlotId) {
-            const courseId = lessonCourseMap[lesson.id];
-            const roomId = reverseRoomMap[lesson.roomId];
-            const timeSlotId = reverseSlotMap[lesson.timeSlotId];
-            if (courseId && roomId && timeSlotId) {
-              newAssignments[courseId] = { timeSlotId, roomId };
-            }
-          }
-        });
-        setAssignments(newAssignments);
-        
-        const hScore = result.schedule.hardScore ?? result.hardScore ?? 0;
-        const sScore = result.schedule.softScore ?? result.softScore ?? 0;
+      const schedule = result?.schedule || result;
+
+      if (schedule && schedule.lessons) {
+        applyScheduleData(schedule);
+
+        const hScore = schedule.hardScore ?? result?.hardScore ?? 0;
+        const sScore = schedule.softScore ?? result?.softScore ?? 0;
         setApiScore({ hard: hScore, soft: sScore });
-        setSolveMessage({ 
-          type: hScore === 0 ? "success" : "error", 
-          text: hScore === 0 
-            ? `✅ Lập lịch thành công! Không vi phạm ràng buộc cứng.` 
+        setSolveMessage({
+          type: hScore === 0 ? "success" : "error",
+          text: hScore === 0
+            ? "✅ Lập lịch thành công! Không vi phạm ràng buộc cứng."
             : `⚠️ Lập lịch hoàn tất nhưng còn ${Math.abs(hScore)} vi phạm ràng buộc cứng.`
         });
       } else {
@@ -78,10 +204,27 @@ export default function SchedulingSystem() {
         </p>
 
         <div className="sched-action-bar">
+          <div className="sched-load">
+            <input
+              className="sched-input"
+              type="text"
+              value={scenarioId}
+              onChange={(e) => setScenarioId(e.target.value)}
+              placeholder="Scenario ID"
+            />
+            <button
+              className="btn-reset"
+              type="button"
+              onClick={handleLoad}
+              disabled={isLoadingData}
+            >
+              {isLoadingData ? "Đang tải..." : "Tải dữ liệu"}
+            </button>
+          </div>
           <button 
             className="btn-solve" 
             onClick={handleSolve} 
-            disabled={isSolving} 
+            disabled={isSolving || !scheduleRaw} 
             id="btn-auto-solve"
             style={{ 
               background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)", 
@@ -111,6 +254,9 @@ export default function SchedulingSystem() {
       {/* ─── Messages ─── */}
       {solveMessage && (
         <div className={`solve-msg ${solveMessage.type}`}>{solveMessage.text}</div>
+      )}
+      {dataMessage && (
+        <div className={`solve-msg ${dataMessage.type}`}>{dataMessage.text}</div>
       )}
       {apiScore && (
         <div style={{ 
@@ -210,7 +356,9 @@ export default function SchedulingSystem() {
           <h3>{Object.keys(assignments).length > 0 ? "Chưa được xếp" : "Danh sách môn học"}</h3>
           <span className="count-badge">{unscheduled.length > 0 ? unscheduled.length : courses.length}</span>
         </div>
-        {Object.keys(assignments).length > 0 && unscheduled.length === 0 ? (
+        {courses.length === 0 ? (
+          <div className="all-done">Vui lòng tải dữ liệu để hiển thị danh sách môn.</div>
+        ) : Object.keys(assignments).length > 0 && unscheduled.length === 0 ? (
           <div className="all-done">✅ Tất cả môn đã được xếp lịch!</div>
         ) : (
           <div className="course-list">

@@ -7,6 +7,8 @@ import { BASE_URL } from "../data/api/api_config";
    Auth Service – Kết nối API Backend
    ═══════════════════════════════════════════ */
 
+const unwrapApiData = (payload) => payload?.data ?? payload;
+
 /**
  * Đăng ký tài khoản mới
  * @param {{ email: string, userName: string, password: string, confirmPassword: string }} data
@@ -46,6 +48,7 @@ export async function login({ email, password }) {
   });
 
   const rawData = await res.json().catch(() => null);
+  const payload = unwrapApiData(rawData);
 
   if (!res.ok) {
     const message =
@@ -54,7 +57,7 @@ export async function login({ email, password }) {
   }
 
   // Map dữ liệu từ API sang DTO
-  const data = new AuthResponse(rawData);
+  const data = new AuthResponse(payload);
 
   // Lưu token vào localStorage nếu server trả về
   if (data?.accessToken) {
@@ -104,6 +107,7 @@ export async function refresh({ accessToken: accessTokenOverride, refreshToken: 
   });
 
   const rawData = await res.json().catch(() => null);
+  const payload = unwrapApiData(rawData);
 
   if (!res.ok) {
     logout();
@@ -111,7 +115,7 @@ export async function refresh({ accessToken: accessTokenOverride, refreshToken: 
     throw new Error(message);
   }
 
-  const data = new AuthResponse(rawData);
+  const data = new AuthResponse(payload);
 
   if (data?.accessToken) {
     localStorage.setItem("authToken", data.accessToken);
@@ -135,10 +139,11 @@ export async function changePassword({ oldPassword, newPassword }) {
     body: JSON.stringify({ oldPassword, newPassword }),
   });
 
-  const data = await res.json().catch(() => null);
+  const rawData = await res.json().catch(() => null);
+  const data = unwrapApiData(rawData);
 
   if (!res.ok) {
-    const message = data?.message || `Đổi mật khẩu thất bại (${res.status})`;
+    const message = rawData?.message || `Đổi mật khẩu thất bại (${res.status})`;
     throw new Error(message);
   }
 

@@ -1,9 +1,37 @@
 import { useState } from "react";
+import * as XLSX from "xlsx";
 import { createUsers } from "../../services/userService";
 
 const defaultRow = { email: "", userName: "", roleName: "Student" };
 
 const normalizeRole = (value) => String(value || "").toLowerCase();
+const roleOptions = [
+  { value: "Admin", code: 0 },
+  { value: "Teacher", code: 1 },
+  { value: "Student", code: 2 },
+];
+
+const roleNameToCode = (value) => {
+  const mapped = mapRoleName(value);
+  return mapped === "Admin" ? 0 : mapped === "Teacher" ? 1 : 2;
+};
+
+const mapRoleName = (value) => {
+  if (value === null || value === undefined || value === "") return "Student";
+  if (Number.isInteger(value)) {
+    return value === 0 ? "Admin" : value === 1 ? "Teacher" : "Student";
+  }
+  const raw = String(value).trim();
+  if (/^\d+$/.test(raw)) {
+    const numeric = Number(raw);
+    return numeric === 0 ? "Admin" : numeric === 1 ? "Teacher" : "Student";
+  }
+  const normalized = raw.toLowerCase();
+  if (normalized.includes("admin")) return "Admin";
+  if (normalized.includes("teacher")) return "Teacher";
+  if (normalized.includes("student")) return "Student";
+  return "Student";
+};
 
 export default function UserManagement({ user, language = "Vietnamese" }) {
   const isVi = language === "Vietnamese";
@@ -11,8 +39,11 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
 
   const [rows, setRows] = useState([{ ...defaultRow }]);
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const [importInfo, setImportInfo] = useState("");
+  const [isParsing, setIsParsing] = useState(false);
+  const [exportFileName, setExportFileName] = useState("users-export.xlsx");
 
   const t = {
     title: isVi ? "Tao tai khoan nguoi dung" : "Create user accounts",
@@ -26,6 +57,20 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
     empty: isVi ? "Vui long nhap day du thong tin." : "Please fill in all fields.",
     success: isVi ? "Tao tai khoan thanh cong." : "Accounts created successfully.",
     noPermission: isVi ? "Ban khong co quyen tao tai khoan." : "You do not have permission to create accounts.",
+    importLabel: isVi ? "Tai file users.xlsx" : "Upload users.xlsx",
+    importHint: isVi
+      ? "File can co cot: email, userName, role (0=Admin,1=Teacher,2=Student)."
+      : "File columns: email, userName, role (0=Admin,1=Teacher,2=Student).",
+    clearList: isVi ? "Xoa danh sach" : "Clear list",
+    importDone: isVi ? "Da tai" : "Loaded",
+    exportTitle: isVi ? "Xuat danh sach" : "Export list",
+    exportHint: isVi
+      ? "Xuat Excel co mat khau ngau nhien cho tung user."
+      : "Export Excel with random passwords per user.",
+    exportPrompt: isVi ? "Nhap ten file xuat:" : "Enter export file name:",
+    exportNameEmpty: isVi ? "Ten file khong hop le." : "Invalid file name.",
+    exportBtn: isVi ? "Xuat Excel" : "Export Excel",
+    exportEmpty: isVi ? "Danh sach trong, khong the xuat." : "List is empty, cannot export.",
   };
 
   const updateRow = (index, key, value) => {
@@ -40,10 +85,120 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
     setRows((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsParsing(true);
+    setMessage({ type: "", text: "" });
+    setImportInfo("");
+    setFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = new Uint8Array(reader.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+        const importedRows = json
+          .map((row) => ({
+            email: String(row.email || "").trim(),
+            userName: String(row.userName || row.username || "").trim(),
+            roleName: mapRoleName(row.role ?? row.roleName),
+          }))
+          .filter((row) => row.email || row.userName || row.roleName);
+
+        if (importedRows.length === 0) {
+          setMessage({ type: "error", text: t.empty });
+          setRows([{ ...defaultRow }]);
+          return;
+        }
+
+        setRows(importedRows);
+        setImportInfo(`${t.importDone} ${importedRows.length} user(s) tu ${file.name}.`);
+      } catch (err) {
+        setMessage({ type: "error", text: err.message || "Khong the doc file." });
+      } finally {
+        setIsParsing(false);
+      }
+    };
+
+    reader.onerror = () => {
+      setIsParsing(false);
+      setMessage({ type: "error", text: "Khong the doc file." });
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleClearList = () => {
+    setRows([{ ...defaultRow }]);
+    setFileName("");
+    setImportInfo("");
+    setMessage({ type: "", text: "" });
+  };
+
+  const generatePassword = (length = 10) => {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+    let result = "";
+    const useCrypto = typeof crypto !== "undefined" && crypto.getRandomValues;
+    if (useCrypto) {
+      const values = new Uint32Array(length);
+      crypto.getRandomValues(values);
+      for (let i = 0; i < length; i += 1) {
+        result += chars[values[i] % chars.length];
+      }
+      return result;
+    }
+    for (let i = 0; i < length; i += 1) {
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+  };
+
+  const handleExport = () => {
+    if (rows.length === 0) {
+      setMessage({ type: "error", text: t.exportEmpty });
+      return;
+    }
+
+    const inputName = window.prompt(t.exportPrompt, exportFileName) ?? "";
+    const sanitized = inputName.trim();
+    if (!sanitized) {
+      setMessage({ type: "error", text: t.exportNameEmpty });
+      return;
+    }
+    const file = sanitized.endsWith(".xlsx") ? sanitized : `${sanitized}.xlsx`;
+    setExportFileName(file);
+
+    const exportRows = rows
+      .filter((row) => row.email || row.userName)
+      .map((row) => ({
+        email: row.email.trim(),
+        userName: row.userName.trim(),
+        role: roleNameToCode(row.roleName),
+        password: generatePassword()
+      }));
+
+    if (exportRows.length === 0) {
+      setMessage({ type: "error", text: t.exportEmpty });
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(exportRows, {
+      header: ["email", "userName", "role", "password"]
+    });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "users");
+    XLSX.writeFile(workbook, file);
+    setMessage({ type: "success", text: `${t.exportBtn}: ${file}` });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: "", text: "" });
-    setOutput("");
 
     if (!isAdmin) {
       setMessage({ type: "error", text: t.noPermission });
@@ -54,7 +209,7 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
       .map((row) => ({
         email: row.email.trim(),
         userName: row.userName.trim(),
-        roleName: row.roleName.trim()
+        roleName: mapRoleName(row.roleName)
       }))
       .filter((row) => row.email || row.userName || row.roleName);
 
@@ -71,9 +226,8 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
 
     setIsLoading(true);
     try {
-      const data = await createUsers(payload);
+      await createUsers(payload);
       setMessage({ type: "success", text: t.success });
-      setOutput(typeof data === "string" ? data : JSON.stringify(data, null, 2));
       setRows([{ ...defaultRow }]);
     } catch (err) {
       setMessage({ type: "error", text: err.message || t.empty });
@@ -100,6 +254,36 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
           <div>
             <h3>{t.title}</h3>
             <p className="user-muted">{t.subtitle}</p>
+          </div>
+        </div>
+
+        <div className="user-import">
+          <label className="user-import-label" htmlFor="user-import-file">{t.importLabel}</label>
+          <div className="user-import-controls">
+            <input
+              id="user-import-file"
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={handleFileChange}
+              disabled={isParsing}
+            />
+            <button type="button" className="user-btn secondary" onClick={handleClearList}>
+              {t.clearList}
+            </button>
+          </div>
+          <p className="user-hint">{t.importHint}</p>
+          {fileName && <div className="user-note">{importInfo || fileName}</div>}
+        </div>
+
+        <div className="user-export">
+          <div className="user-export-header">
+            <h4>{t.exportTitle}</h4>
+            <span>{t.exportHint}</span>
+          </div>
+          <div className="user-export-controls">
+            <button type="button" className="user-btn" onClick={handleExport}>
+              {t.exportBtn}
+            </button>
           </div>
         </div>
 
@@ -131,9 +315,11 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
                     value={row.roleName}
                     onChange={(e) => updateRow(index, "roleName", e.target.value)}
                   >
-                    <option value="Student">Student</option>
-                    <option value="Teacher">Teacher</option>
-                    <option value="Admin">Admin</option>
+                    {roleOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.value}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="user-field user-actions">
@@ -164,7 +350,6 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
         {message.text && (
           <div className={`user-message ${message.type}`}>{message.text}</div>
         )}
-        {output && <pre className="user-output">{output}</pre>}
       </div>
     </section>
   );

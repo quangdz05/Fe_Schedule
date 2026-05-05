@@ -377,6 +377,25 @@ select:focus-visible {
   font-size: 15px;
   background: #fff;
 }
+.form-row input {
+  height: 44px;
+  border: 1px solid #7bb4bd;
+  padding: 0 10px;
+  border-radius: 2px;
+  font-family: inherit;
+  font-size: 15px;
+  background: #fff;
+}
+.grade-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.grade-message {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--red);
+}
 
 /* ═══════════════════════════════════════════
    Scheduling System
@@ -411,6 +430,21 @@ select:focus-visible {
   gap: 12px;
   margin-top: 16px;
   flex-wrap: wrap;
+}
+.sched-load {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sched-input {
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 10px;
+  font-family: inherit;
+  font-size: 14px;
+  min-width: 180px;
 }
 
 /* Score badge */
@@ -952,6 +986,70 @@ select:focus-visible {
   font-size: 18px;
   font-weight: 700;
   margin: 0;
+}
+.user-import {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  background: #fafafa;
+}
+.user-import-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.user-import-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.user-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.user-note {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink2);
+}
+.user-export {
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid var(--line-light);
+  border-radius: 6px;
+  background: #fff;
+}
+.user-export-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.user-export-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.user-export-header span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.user-export-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: end;
+}
+.user-export-controls .user-btn {
+  height: 38px;
 }
 .user-muted {
   margin: 6px 0 0;
