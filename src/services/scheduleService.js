@@ -2,6 +2,21 @@ import { authHeaders } from "./authService";
 import { ScheduleScenarioRequest, ScheduleData } from "../domain/DTO/ScheduleScenarioRequest";
 import { BASE_URL } from "../data/api/api_config";
 
+const normalizeScheduleResponse = (payload) => {
+  if (!payload || typeof payload !== "object") return payload;
+  const data = payload.data && typeof payload.data === "object" ? payload.data : payload;
+
+  if (data.schedule && (data.hardScore !== undefined || data.softScore !== undefined)) {
+    data.schedule = {
+      ...data.schedule,
+      hardScore: data.schedule.hardScore ?? data.hardScore,
+      softScore: data.schedule.softScore ?? data.softScore,
+    };
+  }
+
+  return data;
+};
+
 /**
  * Chuyển đổi dữ liệu từ UI sang định dạng API
  */
@@ -116,7 +131,11 @@ export async function saveScenario(scenarioId, schedule) {
   });
 
   if (!res.ok) {
-    const errorText = await res.text().catch(() => "");
+    let errorText = await res.text().catch(() => "");
+    try {
+      const errObj = JSON.parse(errorText);
+      if (errObj.message) errorText = errObj.message;
+    } catch (e) { /* ignore */ }
     throw new Error(`Lưu kịch bản thất bại (${res.status}): ${errorText}`);
   }
 
@@ -137,11 +156,16 @@ export async function solveSchedule(scenarioRequest) {
   });
 
   if (!res.ok) {
-    const errorText = await res.text().catch(() => "");
+    let errorText = await res.text().catch(() => "");
+    try {
+      const errObj = JSON.parse(errorText);
+      if (errObj.message) errorText = errObj.message;
+    } catch (e) { /* ignore */ }
     throw new Error(`Giải bài toán lập lịch thất bại (${res.status}): ${errorText}`);
   }
 
-  return await res.json();
+  const payload = await res.json();
+  return normalizeScheduleResponse(payload);
 }
 
 /**
@@ -161,9 +185,18 @@ export async function getScheduleResult(scenarioId) {
   });
 
   if (!res.ok) {
-    const errorText = await res.text().catch(() => "");
+    let errorText = await res.text().catch(() => "");
+    try {
+      const errObj = JSON.parse(errorText);
+      if (errObj.message) errorText = errObj.message;
+    } catch (e) { /* ignore */ }
+    
+    if (res.status === 404) {
+      throw new Error(`Không tìm thấy kịch bản này (404): ${errorText}`);
+    }
     throw new Error(`Lấy kết quả thất bại (${res.status}): ${errorText}`);
   }
 
-  return await res.json();
+  const payload = await res.json();
+  return normalizeScheduleResponse(payload);
 }

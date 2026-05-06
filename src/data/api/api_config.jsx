@@ -1,1 +1,1 @@
-export const BASE_URL = "https://pierre-pioneer-timeline-labeled.trycloudflare.com";
+export const BASE_URL = "https://reporters-estates-authority-numerical.trycloudflare.com";
