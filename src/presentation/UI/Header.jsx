@@ -10,7 +10,7 @@ export default function Header({ language = "English" }) {
         <div className="title-group">
           <p>TRƯỜNG ĐẠI HỌC VIỆT NHẬT</p>
           <p>VNU VIETNAM JAPAN UNIVERSITY</p>
-          <h1>{isVi ? "PHẦN MỀM XẾP LỊCH HỌC" : "EXAM SCHEDULING SOFTWARE"}</h1>
+          <h1>{isVi ? "PHẦN MỀM XẾP LỊCH HỌC" : "SORT SCHEDULING SOFTWARE"}</h1>
         </div>
       </div>
     </header>

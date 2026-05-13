@@ -1,202 +1,160 @@
+/**
+ * scheduleService.js — v2 API (async job-based workflow)
+ * Swagger: /api/schedule/*
+ */
 import { authHeaders } from "./authService";
-import { ScheduleScenarioRequest, ScheduleData } from "../domain/DTO/ScheduleScenarioRequest";
 import { BASE_URL } from "../data/api/api_config";
+import { SolveStatus } from "../constants/enums";
 
-const normalizeScheduleResponse = (payload) => {
-  if (!payload || typeof payload !== "object") return payload;
-  const data = payload.data && typeof payload.data === "object" ? payload.data : payload;
-
-  if (data.schedule && (data.hardScore !== undefined || data.softScore !== undefined)) {
-    data.schedule = {
-      ...data.schedule,
-      hardScore: data.schedule.hardScore ?? data.hardScore,
-      softScore: data.schedule.softScore ?? data.softScore,
-    };
-  }
-
-  return data;
-};
-
-/**
- * Chuyển đổi dữ liệu từ UI sang định dạng API
- */
-export function transformToApiFormat(scenarioId, rooms, timeSlots, courses) {
-  // Tạo danh sách giảng viên duy nhất
-  const teachers = Array.from(new Set(courses.map(c => c.lecturer))).map((name, index) => ({
-    id: index + 1,
-    name: name,
-    specificRequirements: null
-  }));
-
-  // Tạo danh sách nhóm sinh viên duy nhất
-  const studentGroups = Array.from(new Set(courses.map(c => c.classGroup))).map((name, index) => ({
-    id: index + 1,
-    name: name,
-    size: courses.find(c => c.classGroup === name).students
-  }));
-
-  // Tạo danh sách môn học duy nhất
-  const subjects = Array.from(new Set(courses.map(c => c.name))).map((name, index) => ({
-    id: index + 1,
-    name: name,
-    requiredRoomType: courses.find(c => c.name === name).requiredRoomType
-  }));
-
-  // Map phòng
-  const roomMap = {};
-  const reverseRoomMap = {};
-  const apiRooms = rooms.map((r, index) => {
-    const apiId = index + 1;
-    roomMap[r.id] = apiId;
-    reverseRoomMap[apiId] = r.id;
-    return {
-      id: apiId,
-      name: r.name,
-      capacity: r.capacity,
-      roomType: r.roomType
-    };
-  });
-
-  // Map khung giờ
-  const slotMap = {};
-  const reverseSlotMap = {};
-  const apiTimeSlots = timeSlots.map((ts, index) => {
-    const apiId = index + 1;
-    slotMap[ts.id] = apiId;
-    reverseSlotMap[apiId] = ts.id;
-    const dayMap = { "Thứ 2": 1, "Thứ 3": 2, "Thứ 4": 3, "Thứ 5": 4, "Thứ 6": 5, "Thứ 7": 6, "Chủ Nhật": 0 };
-    const [start, end] = ts.time.split("-");
-    return {
-      id: apiId,
-      dayOfWeek: dayMap[ts.day] || 1,
-      startTime: `${start.trim()}:00`,
-      endTime: `${end.trim()}:00`
-    };
-  });
-
-  // Map bài học
-  const lessonCourseMap = {};
-  const apiLessons = courses.map((c, index) => {
-    const apiId = index + 1;
-    lessonCourseMap[apiId] = c.id;
-    const teacherId = teachers.find(t => t.name === c.lecturer).id;
-    const studentGroupId = studentGroups.find(sg => sg.name === c.classGroup).id;
-    const subjectId = subjects.find(s => s.name === c.name).id;
-    return {
-      id: apiId,
-      teacherId,
-      studentGroupId,
-      subjectId,
-      requiredRoomType: c.requiredRoomType,
-      deliveryMode: c.deliveryMode,
-      roomId: null,
-      timeSlotId: null
-    };
-  });
-
-  const scheduleData = new ScheduleData({
-    teachers,
-    rooms: apiRooms,
-    studentGroups,
-    subjects,
-    timeSlots: apiTimeSlots,
-    lessons: apiLessons
-  });
-
-  const request = new ScheduleScenarioRequest({
-    scenarioId,
-    saveScenario: true,
-    saveResult: true,
-    schedule: scheduleData
-  });
-
-  return { request, reverseRoomMap, reverseSlotMap, lessonCourseMap };
-}
-
-/**
- * Lưu kịch bản lập lịch
- */
-export async function saveScenario(scenarioId, schedule) {
-  if (!scenarioId) {
-    throw new Error("Thiếu scenarioId để lưu kịch bản.");
-  }
-
-  const res = await fetch(`${BASE_URL}/api/schedule/scenarios/${scenarioId}`, {
-    method: "POST",
-    headers: {
-      ...authHeaders(),
-      "accept": "*/*"
-    },
-    body: JSON.stringify(schedule),
-  });
-
+/* ─────────────────────────────────────────────────────────
+ * 1. GET /api/schedule/pending-sections
+ *    Trả về danh sách course sections chưa được xếp lịch
+ * ───────────────────────────────────────────────────────── */
+async function handleResponse(res) {
   if (!res.ok) {
-    let errorText = await res.text().catch(() => "");
-    try {
-      const errObj = JSON.parse(errorText);
-      if (errObj.message) errorText = errObj.message;
-    } catch (e) { /* ignore */ }
-    throw new Error(`Lưu kịch bản thất bại (${res.status}): ${errorText}`);
+    const txt = await res.text().catch(() => "");
+    throw new Error(`API Error (${res.status}): ${txt}`);
   }
-
-  return await res.json().catch(() => ({ success: true }));
+  const json = await res.json();
+  // Nếu có wrapper { success: true, data: ... } thì lấy data
+  if (json && Object.prototype.hasOwnProperty.call(json, 'data') && json.success !== undefined) {
+    return json.data;
+  }
+  return json;
 }
 
-/**
- * Giải bài toán lập lịch
- */
-export async function solveSchedule(scenarioRequest) {
+export async function getPendingSections() {
+  const res = await fetch(`${BASE_URL}/api/schedule/pending-sections`, {
+    method: "GET",
+    headers: { ...authHeaders(), accept: "application/json" },
+  });
+  return handleResponse(res);
+}
+
+/* ─────────────────────────────────────────────────────────
+ * 2. POST /api/schedule/solve
+ *    Gửi yêu cầu solve → nhận { jobId }
+ * ───────────────────────────────────────────────────────── */
+export async function solveSchedule(name, courseSectionIds) {
+  const body = { name, courseSectionIds };
   const res = await fetch(`${BASE_URL}/api/schedule/solve`, {
     method: "POST",
     headers: {
       ...authHeaders(),
-      "accept": "application/json"
+      "Content-Type": "application/json",
+      accept: "application/json",
     },
-    body: JSON.stringify(scenarioRequest),
+    body: JSON.stringify(body),
   });
-
-  if (!res.ok) {
-    let errorText = await res.text().catch(() => "");
-    try {
-      const errObj = JSON.parse(errorText);
-      if (errObj.message) errorText = errObj.message;
-    } catch (e) { /* ignore */ }
-    throw new Error(`Giải bài toán lập lịch thất bại (${res.status}): ${errorText}`);
-  }
-
-  const payload = await res.json();
-  return normalizeScheduleResponse(payload);
+  return handleResponse(res);
 }
 
-/**
- * Lấy kết quả lập lịch theo scenarioId
- */
-export async function getScheduleResult(scenarioId) {
-  if (!scenarioId) {
-    throw new Error("Thiếu scenarioId để lấy kết quả.");
-  }
-
-  const res = await fetch(`${BASE_URL}/api/schedule/result/${scenarioId}`, {
+/* ─────────────────────────────────────────────────────────
+ * 3. GET /api/schedule/solve/{jobId}
+ *    Poll trạng thái job: { status, progress, result, ... }
+ * ───────────────────────────────────────────────────────── */
+export async function pollSolveStatus(jobId) {
+  const res = await fetch(`${BASE_URL}/api/schedule/solve/${encodeURIComponent(jobId)}`, {
     method: "GET",
+    headers: { ...authHeaders(), accept: "application/json" },
+  });
+  return handleResponse(res);
+}
+
+/* ─────────────────────────────────────────────────────────
+ * 4. GET /api/schedule/result/{scenarioId}
+ *    Load lịch đã lưu từ DB theo scenarioId
+ * ───────────────────────────────────────────────────────── */
+export async function getScheduleResult(scenarioId) {
+  if (!scenarioId) throw new Error("Thiếu scenarioId để lấy kết quả.");
+  const res = await fetch(`${BASE_URL}/api/schedule/result/${encodeURIComponent(scenarioId)}`, {
+    method: "GET",
+    headers: { ...authHeaders(), accept: "application/json" },
+  });
+  return handleResponse(res);
+}
+
+/* ─────────────────────────────────────────────────────────
+ * 5. POST /api/schedule/evaluate-move
+ *    Đánh giá drag-drop trước khi commit
+ * ───────────────────────────────────────────────────────── */
+export async function evaluateMove(sessionId, moves) {
+  const body = { sessionId, moves };
+  const res = await fetch(`${BASE_URL}/api/schedule/evaluate-move`, {
+    method: "POST",
     headers: {
       ...authHeaders(),
-      "accept": "application/json"
-    }
+      "Content-Type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify(body),
   });
+  return handleResponse(res);
+}
 
-  if (!res.ok) {
-    let errorText = await res.text().catch(() => "");
-    try {
-      const errObj = JSON.parse(errorText);
-      if (errObj.message) errorText = errObj.message;
-    } catch (e) { /* ignore */ }
-    
-    if (res.status === 404) {
-      throw new Error(`Không tìm thấy kịch bản này (404): ${errorText}`);
-    }
-    throw new Error(`Lấy kết quả thất bại (${res.status}): ${errorText}`);
-  }
+/* ─────────────────────────────────────────────────────────
+ * 6. POST /api/schedule/hover-lesson
+ *    Lấy chi tiết lesson khi hover (multi-teacher, conflicts)
+ * ───────────────────────────────────────────────────────── */
+export async function getLessonDetail(sessionId, lessonId) {
+  const body = { sessionId, lessonId };
+  const res = await fetch(`${BASE_URL}/api/schedule/hover-lesson`, {
+    method: "POST",
+    headers: {
+      ...authHeaders(),
+      "Content-Type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return handleResponse(res);
+}
 
-  const payload = await res.json();
-  return normalizeScheduleResponse(payload);
+/* ─────────────────────────────────────────────────────────
+ * 7. POST /api/schedule/sessions/{sessionId}/save
+ *    Lưu lịch từ memory vào DB
+ * ───────────────────────────────────────────────────────── */
+export async function saveSession(sessionId) {
+  if (!sessionId) throw new Error("Thiếu sessionId để lưu.");
+  const res = await fetch(`${BASE_URL}/api/schedule/sessions/${encodeURIComponent(sessionId)}/save`, {
+    method: "POST",
+    headers: { ...authHeaders(), accept: "application/json" },
+  });
+  return handleResponse(res).catch(() => ({ success: true }));
+}
+
+/* ─────────────────────────────────────────────────────────
+ * HELPER: waitForSolveResult
+ * Poll mỗi 3s cho đến khi status = Completed / Failed
+ * onProgress(pct: number, phase: string) được gọi mỗi lần poll
+ * ───────────────────────────────────────────────────────── */
+const PHASE_LABELS = {
+  [SolveStatus.Queued]:    "Đang xếp hàng chờ...",
+  [SolveStatus.Running]:   "Đang xếp lịch...",
+  [SolveStatus.Completed]: "Hoàn tất!",
+  [SolveStatus.Failed]:    "Thất bại",
+};
+
+export function waitForSolveResult(jobId, onProgress, intervalMs = 3000) {
+  return new Promise((resolve, reject) => {
+    const poll = async () => {
+      try {
+        const data = await pollSolveStatus(jobId);
+        const status = data.status ?? data.Status;
+        const pct = data.progress ?? data.Progress ?? 0;
+        const phase = PHASE_LABELS[status] ?? "Đang xử lý...";
+
+        if (typeof onProgress === "function") onProgress(pct, phase);
+
+        if (status === SolveStatus.Completed) return resolve(data);
+        if (status === SolveStatus.Failed)
+          return reject(new Error(data.error ?? data.message ?? "Solver thất bại"));
+
+        setTimeout(poll, intervalMs);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    poll();
+  });
 }
