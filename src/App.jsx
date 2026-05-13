@@ -96,12 +96,12 @@ export default function App() {
       </nav>
 
       {/* ═══ Content ═══ */}
-      <main className="content">
+      <main className={`content ${activePage === "Scheduling" ? "content-wide" : ""}`}>
         {activePage === "Grade" && allowedNavItems.includes("Grade") && (
           <GradeForm user={user} language={language} />
         )}
         {activePage === "Scheduling" && allowedNavItems.includes("Scheduling") && (
-          <SchedulingSystem />
+          <SchedulingSystem user={user} language={language} />
         )}
         {activePage === "Change password" && allowedNavItems.includes("Change password") && (
           <ChangePassword user={user} language={language} />

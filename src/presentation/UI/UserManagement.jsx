@@ -44,6 +44,7 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
   const [importInfo, setImportInfo] = useState("");
   const [isParsing, setIsParsing] = useState(false);
   const [exportFileName, setExportFileName] = useState("users-export.xlsx");
+  const [createdUsers, setCreatedUsers] = useState([]);
 
   const t = {
     title: isVi ? "Tao tai khoan nguoi dung" : "Create user accounts",
@@ -71,6 +72,8 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
     exportNameEmpty: isVi ? "Ten file khong hop le." : "Invalid file name.",
     exportBtn: isVi ? "Xuat Excel" : "Export Excel",
     exportEmpty: isVi ? "Danh sach trong, khong the xuat." : "List is empty, cannot export.",
+    createdAccounts: isVi ? "Tài khoản đã tạo:" : "Created Accounts:",
+    exportCreatedBtn: isVi ? "Xuất Excel Kết Quả" : "Export Results",
   };
 
   const updateRow = (index, key, value) => {
@@ -140,62 +143,6 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
     setMessage({ type: "", text: "" });
   };
 
-  const generatePassword = (length = 10) => {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
-    let result = "";
-    const useCrypto = typeof crypto !== "undefined" && crypto.getRandomValues;
-    if (useCrypto) {
-      const values = new Uint32Array(length);
-      crypto.getRandomValues(values);
-      for (let i = 0; i < length; i += 1) {
-        result += chars[values[i] % chars.length];
-      }
-      return result;
-    }
-    for (let i = 0; i < length; i += 1) {
-      result += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return result;
-  };
-
-  const handleExport = () => {
-    if (rows.length === 0) {
-      setMessage({ type: "error", text: t.exportEmpty });
-      return;
-    }
-
-    const inputName = window.prompt(t.exportPrompt, exportFileName) ?? "";
-    const sanitized = inputName.trim();
-    if (!sanitized) {
-      setMessage({ type: "error", text: t.exportNameEmpty });
-      return;
-    }
-    const file = sanitized.endsWith(".xlsx") ? sanitized : `${sanitized}.xlsx`;
-    setExportFileName(file);
-
-    const exportRows = rows
-      .filter((row) => row.email || row.userName)
-      .map((row) => ({
-        email: row.email.trim(),
-        userName: row.userName.trim(),
-        role: roleNameToCode(row.roleName),
-        password: generatePassword()
-      }));
-
-    if (exportRows.length === 0) {
-      setMessage({ type: "error", text: t.exportEmpty });
-      return;
-    }
-
-    const worksheet = XLSX.utils.json_to_sheet(exportRows, {
-      header: ["email", "userName", "role", "password"]
-    });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "users");
-    XLSX.writeFile(workbook, file);
-    setMessage({ type: "success", text: `${t.exportBtn}: ${file}` });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: "", text: "" });
@@ -209,31 +156,63 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
       .map((row) => ({
         email: row.email.trim(),
         userName: row.userName.trim(),
-        roleName: mapRoleName(row.roleName)
+        role: roleNameToCode(row.roleName)
       }))
-      .filter((row) => row.email || row.userName || row.roleName);
+      .filter((row) => row.email || row.userName || row.role !== undefined);
 
     if (payload.length === 0) {
       setMessage({ type: "error", text: t.empty });
       return;
     }
 
-    const invalidRow = payload.find((row) => !row.email || !row.userName || !row.roleName);
+    const invalidRow = payload.find((row) => !row.email || !row.userName || row.role === undefined);
     if (invalidRow) {
       setMessage({ type: "error", text: t.empty });
       return;
     }
 
     setIsLoading(true);
+    setCreatedUsers([]);
     try {
-      await createUsers(payload);
-      setMessage({ type: "success", text: t.success });
+      const response = await createUsers(payload);
+      setMessage({ type: "success", text: response?.message || t.success });
       setRows([{ ...defaultRow }]);
+      if (response && response.data && response.data.length > 0) {
+        setCreatedUsers(response.data);
+      }
     } catch (err) {
       setMessage({ type: "error", text: err.message || t.empty });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleExportCreated = () => {
+    if (createdUsers.length === 0) return;
+
+    const inputName = window.prompt(t.exportPrompt, exportFileName) ?? "";
+    const sanitized = inputName.trim();
+    if (!sanitized) {
+      setMessage({ type: "error", text: t.exportNameEmpty });
+      return;
+    }
+    const file = sanitized.endsWith(".xlsx") ? sanitized : `${sanitized}.xlsx`;
+    setExportFileName(file);
+
+    const exportRows = createdUsers.map((row) => ({
+      email: row.email,
+      userName: row.userName,
+      role: row.role,
+      password: row.generatedPassword
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportRows, {
+      header: ["email", "userName", "role", "password"]
+    });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "users_created");
+    XLSX.writeFile(workbook, file);
+    setMessage({ type: "success", text: `${t.exportBtn}: ${file}` });
   };
 
   if (!isAdmin) {
@@ -273,18 +252,6 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
           </div>
           <p className="user-hint">{t.importHint}</p>
           {fileName && <div className="user-note">{importInfo || fileName}</div>}
-        </div>
-
-        <div className="user-export">
-          <div className="user-export-header">
-            <h4>{t.exportTitle}</h4>
-            <span>{t.exportHint}</span>
-          </div>
-          <div className="user-export-controls">
-            <button type="button" className="user-btn" onClick={handleExport}>
-              {t.exportBtn}
-            </button>
-          </div>
         </div>
 
         <form className="user-form" onSubmit={handleSubmit}>
@@ -349,6 +316,37 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
 
         {message.text && (
           <div className={`user-message ${message.type}`}>{message.text}</div>
+        )}
+
+        {createdUsers.length > 0 && (
+          <div className="user-output" style={{ background: '#f8fafc', color: '#0f172a', border: '1px solid #e2e8f0', marginTop: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <h4 style={{ margin: 0 }}>{t.createdAccounts}</h4>
+              <button type="button" className="user-btn" onClick={handleExportCreated}>
+                {t.exportCreatedBtn}
+              </button>
+            </div>
+            <div style={{ maxHeight: '300px', overflow: 'auto' }}>
+              <table className="demo-table">
+                <thead>
+                  <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {createdUsers.map((u, i) => (
+                    <tr key={i}>
+                      <td>{u.email}</td>
+                      <td>{u.userName}</td>
+                      <td><code>{u.generatedPassword}</code></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
     </section>

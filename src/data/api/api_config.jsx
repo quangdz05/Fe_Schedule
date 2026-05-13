@@ -1,1 +1,1 @@
-export const BASE_URL = "https://reporters-estates-authority-numerical.trycloudflare.com";
+export const BASE_URL = "https://rely-main-yeast-longest.trycloudflare.com";
