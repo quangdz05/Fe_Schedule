@@ -101,8 +101,7 @@ const buildLessonsFromSchedule = (schedule) => {
 };
 
 export default function SchedulingSystem() {
-  const [sessionId, setSessionId] = useState(null);
-  const [selectedSectionIds, setSelectedSectionIds] = useState([]);
+  const [scenarioId, setScenarioId] = useState("");
   const [scheduleRaw, setScheduleRaw] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [isSolving, setIsSolving] = useState(false);
@@ -177,31 +176,31 @@ export default function SchedulingSystem() {
   const onPanelDrop = useCallback((e)=>{ e.preventDefault(); const id=e.dataTransfer.getData("text/plain")||dragId; if(!id) return; setLessons(prev=>prev.map(l=>l.id===id?{...l,slotId:null}:l)); setDragId(null); setDragOver(null); },[dragId]);
   const onPanelDragOver = useCallback((e)=>{ e.preventDefault(); e.dataTransfer.dropEffect="move"; setDragOver("panel"); },[]);
 
-  const handleSolve = async(ids) => {
-    if(!ids||ids.length===0){setSolveMessage({type:"error",text:"Vui lòng chọn ít nhất 1 học phần."});return;}
-    setSelectedSectionIds(ids);
-    setIsSolving(true); setSolveMessage({type:"info",text:"Đang gửi yêu cầu xếp lịch..."});
-    setConflicts([]); setHighlightedIds(new Set()); setEvalPopup(null);
+  /* ─── API handlers ─── */
+  const handleLoad = async () => {
+    const tid = scenarioId.trim();
+    if (!tid) { setDataMessage({ type: "error", text: "Vui lòng nhập Scenario ID." }); return; }
+    setIsLoadingData(true); setDataMessage(null); setSolveMessage(null);
     try {
-      const {jobId:jid} = await solveSchedule("Lịch mới",ids);
-      setJobId(jid);
-      setSessionId(jid);
-    } catch(err) {
-      setSolveMessage({type:"error",text:`Lỗi: ${err.message}`});
-      setIsSolving(false);
-    }
+      const result = await getScheduleResult(tid);
+      const schedule = result?.schedule || result;
+      if (!schedule?.lessons) throw new Error("API không trả về dữ liệu hợp lệ.");
+      setScheduleRaw(schedule);
+      setLessons(buildLessonsFromSchedule(schedule, false));
+      setApiScore({ hard: 0, soft: 0 });
+      setScenarioId(result?.scenarioId || tid);
+      setScheduleState("loaded");
+      setDataMessage({ type: "success", text: `Đã tải ${schedule.lessons.length} lớp. Kéo thả hoặc nhấn "Xếp lịch tự động".` });
+    } catch (err) {
+      setDataMessage({ type: "error", text: `Lỗi: ${err.message}` });
+    } finally { setIsLoadingData(false); }
   };
 
-  const handleSolveCompleted = (result) => {
-    setIsSolving(false); setJobId(null);
-    // result lúc này là payload 'data' từ job polling
-    // Cấu trúc thực tế: result.result.schedule.lessons
-    const solveData = result?.result || result;
-    const schedule = solveData?.schedule || result?.schedule || result;
-    
-    if(!schedule?.lessons){
-      setSolveMessage({type:"error",text:"API không trả về kết quả hợp lệ (thiếu trường lessons)."});
-      console.error("Payload không hợp lệ:", result);
+  const handleLoadMock = () => {
+    const payload = mockSchedule?.schedule ? mockSchedule : { schedule: mockSchedule };
+    const schedule = payload.schedule || payload;
+    if (!schedule?.lessons) {
+      setDataMessage({ type: "error", text: "Mock khong hop le." });
       return;
     }
     
@@ -214,23 +213,27 @@ export default function SchedulingSystem() {
     const ss = solveData.softScore ?? schedule.softScore ?? 0;
     setApiScore({ hard: hs, soft: ss });
     setScheduleState("solved");
-    setSolveMessage({type: hs===0?"success":"warning", text:`Xếp xong! Hard: ${hs}, Soft: ${ss}`});
+    setSolveMessage(null);
+    setDataMessage({ type: "success", text: "Da nap mock de test nhanh." });
   };
 
-  const handleSolveFailed = (err) => {
-    setIsSolving(false); setJobId(null);
-    setSolveMessage({type:"error",text:`Solver thất bại: ${err.message}`});
-  };
-
-  const handleSave = async() => {
-    if(!sessionId){setSaveMessage({type:"error",text:"Không có session để lưu."});return;}
-    setIsSaving(true); setSaveMessage({type:"info",text:"Đang lưu..."});
+  const handleSolve = async () => {
+    if (!scheduleRaw) { setSolveMessage({ type: "error", text: "Chưa có dữ liệu." }); return; }
+    const tid = scenarioId.trim() || `scenario-${Date.now()}`;
+    setIsSolving(true); setSolveMessage({ type: "info", text: "Đang gửi yêu cầu..." });
     try {
-      await saveSession(sessionId);
-      setSaveMessage({type:"success",text:"✅ Đã lưu lịch vào Database!"});
-    } catch(err) {
-      setSaveMessage({type:"error",text:`Lỗi lưu: ${err.message}`});
-    } finally { setIsSaving(false); }
+      const result = await solveSchedule({ scenarioId: tid, schedule: scheduleRaw, saveScenario: true, saveResult: true });
+      const schedule = result?.schedule || result;
+      if (!schedule?.lessons) throw new Error("API không trả về kết quả hợp lệ.");
+      setLessons(buildLessonsFromSchedule(schedule, true));
+      setScheduleRaw(schedule);
+      setApiScore({ hard: schedule.hardScore ?? 0, soft: schedule.softScore ?? 0 });
+      if (result?.scenarioId) setScenarioId(result.scenarioId);
+      setScheduleState("solved");
+      setSolveMessage({ type: schedule.hardScore === 0 ? "success" : "warning", text: `Xếp xong! Hard: ${schedule.hardScore ?? 0}, Soft: ${schedule.softScore ?? 0}` });
+    } catch (err) {
+      setSolveMessage({ type: "error", text: `Lỗi: ${err.message}` });
+    } finally { setIsSolving(false); }
   };
 
   const handleReset = () => {
@@ -250,10 +253,10 @@ export default function SchedulingSystem() {
   const getGridRowStart = (pid) => { if(pid==="break") return 7; const p=Number(pid); return p<=5?p+1:p+2; };
 
   const stateMap = {
-    empty:{text:"Chưa có dữ liệu",cls:"state-empty",icon:"📭"},
-    loaded:{text:"Đã tải – Chờ xếp lịch",cls:"state-loaded",icon:"⏳"},
-    manual:{text:"Đang xếp tay",cls:"state-manual",icon:"✋"},
-    solved:{text:"Đã xếp xong",cls:"state-solved",icon:"✅"},
+    empty: { text: "Chưa có dữ liệu", cls: "state-empty", icon: "📭" },
+    loaded: { text: "Đã tải – Chờ xếp lịch", cls: "state-loaded", icon: "⏳" },
+    manual: { text: "Đang xếp tay", cls: "state-manual", icon: "✋" },
+    solved: { text: "Đã xếp xong", cls: "state-solved", icon: "✅" },
   };
   const st = stateMap[scheduleState]||stateMap.empty;
 
@@ -264,18 +267,16 @@ export default function SchedulingSystem() {
     return (
       <div
         ref={cardRef}
-        className={`lesson-card ${variant} ${lesson.major} ${dragId===lesson.id?"dragging":""} ${lesson.isPinned?"pinned":""} ${isHighlighted?"highlighted":""} ${lesson.sessionDuration>1?"multi-slot":""}`}
-        style={variant==="grid"&&lesson.duration>1?{gridRow:`span ${lesson.duration}`,minHeight:`${lesson.duration*60}px`}:{}}
+        className={`lesson-card ${variant} ${lesson.major} ${dragId === lesson.id ? "dragging" : ""}`}
         draggable
-        onDragStart={e=>onDragStart(e,lesson.id)}
+        onDragStart={(e) => onDragStart(e, lesson.id)}
         onDragEnd={onDragEnd}
-        onMouseEnter={()=>{ if(cardRef.current){const r=cardRef.current.getBoundingClientRect();setFlipLeft(window.innerWidth-r.right<350);} }}
+        onMouseEnter={handleMouseEnter}
       >
         <div className="lesson-head">
           <span className="lesson-major">{lesson.major}</span>
           <span className="lesson-section">{lesson.section}</span>
-          {lesson.isPinned && <span className="lesson-pin" title="Đã ghim">📌</span>}
-          {variant==="grid"&&<span className="lesson-remove" title="Gỡ khỏi lịch" onClick={()=>setLessons(p=>p.map(l=>l.id===lesson.id?{...l,slotId:null}:l))}>✕</span>}
+          {variant === "grid" && <span className="lesson-remove" title="Gỡ khỏi lịch" onClick={() => setLessons((p) => p.map((l) => l.id === lesson.id ? { ...l, slotId: null } : l))}>✕</span>}
         </div>
         <strong>{lesson.name}</strong>
         <span className="lesson-teacher">{lesson.teacher}</span>
@@ -288,63 +289,53 @@ export default function SchedulingSystem() {
           <div className="tt-row-top">
             <span className="tt-major">{lesson.major}</span>
             <span className="tt-section">Học Phần {lesson.section}</span>
-            <span className={`tt-req-badge ${lesson.isRequired?"required":"elective"}`}>{lesson.isRequired?"BẮT BUỘC":"TỰ CHỌN"}</span>
+            <span className={`tt-req-badge ${lesson.isRequired ? "required" : "elective"}`}>
+              {lesson.isRequired ? "BẮT BUỘC" : "TỰ CHỌN"}
+            </span>
           </div>
           <div className="tt-name">{lesson.name}</div>
           <div className="tt-teacher-row">
-            <span className="tt-label">Giảng viên:</span>
+            <span className="tt-label">{t.ttTeacher}</span>
             <strong>{lesson.teacher}</strong>{" "}
             <span className={`tt-type ${lesson.type==="Guest"?"guest":""}`}>({lesson.type})</span>
           </div>
           <div className="tt-details">
-            <div className="tt-detail-col"><span className="tt-label">Thời lượng:</span><span className="tt-val">⏱ {lesson.duration||1} Tiết</span></div>
-            <div className="tt-detail-col"><span className="tt-label">Sĩ số (SV):</span><span className="tt-val">👥 {lesson.cap}</span></div>
+            <div className="tt-detail-col">
+              <span className="tt-label">Thời lượng:</span>
+              <span className="tt-val">⏱ {lesson.duration || 1} Tiết</span>
+            </div>
+            <div className="tt-detail-col">
+              <span className="tt-label">Sĩ số (SV):</span>
+              <span className="tt-val">👥 {lesson.cap} Sinh viên</span>
+            </div>
           </div>
-          <div className="tt-room-row"><span className="tt-label">Yêu cầu phòng:</span><span className="tt-val">🏢 {lesson.reqRoom}</span></div>
-          {lesson.isPinned&&<div className="tt-pinned">📌 Tiết này đã được ghim cố định</div>}
+          <div className="tt-room-row">
+            <span className="tt-label">Yêu cầu phòng:</span>
+            <span className="tt-val">🏢 {lesson.reqRoom}</span>
+          </div>
         </div>
       </div>
     );
   };
 
   return (
-    <div className={`schedv2 ${dragId?"is-dragging":""}`}>
-      {/* Solver overlay */}
-      {isSolving && jobId && (
-        <SolverProgress jobId={jobId} onCompleted={handleSolveCompleted} onFailed={handleSolveFailed} />
-      )}
-
-      {/* Evaluate-move popup */}
-      {evalPopup && (
-        <div className="evaluate-popup-overlay" onClick={()=>setEvalPopup(null)}>
-          <div className="evaluate-popup" onClick={e=>e.stopPropagation()}>
-            <div className="ep-title">🔄 Đánh giá di chuyển</div>
-            <div className="ep-score">
-              <span>ΔHard: <strong className={evalPopup.deltaHardScore<0?"ep-neg":"ep-pos"}>{evalPopup.deltaHardScore??0}</strong></span>
-              <span>ΔSoft: <strong className={evalPopup.deltaSoftScore<0?"ep-neg":"ep-pos"}>{evalPopup.deltaSoftScore??0}</strong></span>
-            </div>
-            {evalPopup.addedConflicts?.length>0&&<div className="ep-conflicts added">⛔ Thêm {evalPopup.addedConflicts.length} xung đột</div>}
-            {evalPopup.resolvedConflicts?.length>0&&<div className="ep-conflicts resolved">✅ Giải quyết {evalPopup.resolvedConflicts.length} xung đột</div>}
-            <div className="ep-actions">
-              <button className="schedv2-btn primary" onClick={handleEvalConfirm}>✅ Xác nhận</button>
-              <button className="schedv2-btn ghost" onClick={()=>setEvalPopup(null)}>✕ Hủy</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Header */}
+    <div className={`schedv2 ${dragId ? "is-dragging" : ""}`}>
+      {/* ═══ Header ═══ */}
       <div className="schedv2-header">
-        <SectionPicker onSectionsSelected={handleSolve} disabled={isSolving} />
-        <div className="schedv2-header-actions">
-          {sessionId && scheduleState!=="empty" && (
-            <button className="schedv2-btn save" onClick={handleSave} disabled={isSaving}>
-              {isSaving?"⏳ Đang lưu...":"💾 Lưu lịch vào Database"}
-            </button>
-          )}
-          <button className="schedv2-btn ghost" onClick={handleReset}>↺ Reset</button>
+        <div className="schedv2-actions">
+          <input className="schedv2-input" type="text" value={scenarioId} onChange={(e) => setScenarioId(e.target.value)} placeholder="Scenario ID" />
+          <button className="schedv2-btn ghost" type="button" onClick={handleLoad} disabled={isLoadingData}>
+            {isLoadingData ? "Đang tải..." : "📥 Tải dữ liệu"}
+          </button>
+          <button className="schedv2-btn ghost" type="button" onClick={handleLoadMock}>
+            Load mock
+          </button>
+          <button className="schedv2-btn primary" type="button" onClick={handleSolve} disabled={isSolving || !scheduleRaw} title={!scheduleRaw ? "Tải dữ liệu trước" : ""}>
+            {isSolving ? <span className="btn-solving"><span className="solving-spinner" />Đang xếp...</span> : "⚡ Xếp lịch tự động"}
+          </button>
+          <button className="schedv2-btn ghost" type="button" onClick={handleReset}>↺ Reset</button>
         </div>
-      </div>
+      )}
 
       {/* Status row */}
       <div className="schedv2-status-row">
@@ -359,64 +350,72 @@ export default function SchedulingSystem() {
         </div>
       </div>
 
-      {/* Toolbar */}
+      {/* ═══ Toolbar ═══ */}
       <div className="schedv2-toolbar">
         <div className="schedv2-filters">
-          {majors.map(m=>(
-            <button key={m} type="button" className={`schedv2-filter ${selectedMajor===m?"active":""}`} onClick={()=>setSelectedMajor(m)}>
-              {m==="ALL"?"Toàn trường":m}
+          {majors.map((m) => (
+            <button key={m} type="button" className={`schedv2-filter ${selectedMajor === m ? "active" : ""}`} onClick={() => setSelectedMajor(m)}>
+              {m === "ALL" ? "Toàn trường" : m}
             </button>
           ))}
         </div>
         <div className="schedv2-drag-hint">
-          {scheduleState!=="empty"&&<span>💡 Kéo thả lớp học để xếp lịch thủ công</span>}
+          {scheduleState !== "empty" && <span>💡 Kéo thả lớp học để xếp lịch thủ công</span>}
         </div>
-      </div>
+      )}
 
-      {/* Main layout */}
+      {/* ═══ Main layout ═══ */}
       <div className="schedv2-layout">
-        {/* Left panel */}
+        {/* Left panel: Pending lessons */}
         <aside className="schedv2-panel" onDragOver={onPanelDragOver} onDragLeave={onCellDragLeave} onDrop={onPanelDrop}>
           <div className="panel-header">
-            <span>📋 Lớp chờ xếp {selectedMajor!=="ALL"?`(${selectedMajor})`:""}</span>
+            <span>📋 Lớp chờ xếp {selectedMajor !== "ALL" ? `(${selectedMajor})` : ""}</span>
             <span className="panel-count">{unassignedLessons.length}</span>
           </div>
-          <div className={`panel-list ${dragOver==="panel"?"drop-target":""}`}>
-            {unassignedLessons.length===0?(
+          <div className={`panel-list ${dragOver === "panel" ? "drop-target" : ""}`}>
+            {unassignedLessons.length === 0 ? (
               <div className="panel-empty">
-                {scheduleState==="empty"?"Chọn học phần và nhấn Xếp lịch.":"Tất cả lớp đã được xếp. ✓"}
+                {scheduleState === "empty" ? "Nhập Scenario ID và nhấn 'Tải dữ liệu'." : "Tất cả lớp đã được xếp. ✓"}
               </div>
-            ):unassignedLessons.map(l=><LessonCard key={l.id} lesson={l} variant="pending"/>)}
+            ) : (
+              unassignedLessons.map((l) => <LessonCard key={l.id} lesson={l} variant="pending" />)
+            )}
           </div>
         </aside>
 
         {/* Center grid */}
         <section className="schedv2-grid">
           <div className="schedv2-grid-head">
-            Thời khóa biểu {selectedMajor!=="ALL"?`– ${selectedMajor}`:""}
-            {scheduleState==="solved"&&<span className="grid-head-solved">✓ Đã xếp</span>}
+            Thời khóa biểu {selectedMajor !== "ALL" ? `– ${selectedMajor}` : ""}
+            {scheduleState === "solved" && <span className="grid-head-solved">✓ Đã xếp</span>}
           </div>
           <div className="schedv2-grid-wrap">
-            <div className="schedv2-grid-table" style={{gridTemplateColumns:"70px repeat(6, 1fr)",gridTemplateRows:"36px repeat(5, 60px) 30px repeat(7, 60px)"}}>
+            <div className="schedv2-grid-table" style={{ gridTemplateColumns: "70px repeat(6, 1fr)", gridTemplateRows: "36px repeat(5, 60px) 30px repeat(7, 60px)" }}>
               <div className="schedv2-grid-row header">
                 <div className="schedv2-grid-cell time">Tiết</div>
-                {DAYS.map((d,i)=><div key={d} className={`schedv2-grid-cell day ${i===5?"sat":""}`}>{d}</div>)}
+                {DAYS.map((d, i) => <div key={d} className={`schedv2-grid-cell day ${i === 5 ? "sat" : ""}`}>{d}</div>)}
               </div>
               {PERIODS.map(period=>{
                 const rowStart = getGridRowStart(period.id);
-                if(period.id==="break") return <div key="break" className="schedv2-break" style={{gridRowStart:rowStart,gridColumnStart:1,gridColumnEnd:8}}>{period.time} – NGHỈ TRƯA</div>;
+                if (period.id === "break") {
+                  return <div key="break" className="schedv2-break" style={{ gridRowStart: rowStart, gridColumnStart: 1, gridColumnEnd: 8 }}>{period.time} – NGHỈ TRƯA</div>;
+                }
                 return (
-                  <div key={period.id} className="schedv2-grid-row" style={{gridRowStart:rowStart}}>
+                  <div key={period.id} className="schedv2-grid-row" style={{ gridRowStart: rowStart }}>
                     <div className="schedv2-grid-cell time"><strong>{period.name}</strong><span>{period.time}</span></div>
-                    {DAYS.map((_,di)=>{
-                      const sk=`${di}-${period.id}`;
-                      const cls=cellMap[sk]||[];
-                      const isOver=dragOver===sk;
+                    {DAYS.map((_, di) => {
+                      const sk = `${di}-${period.id}`;
+                      const cls = cellMap[sk] || [];
+                      const isOver = dragOver === sk;
                       return (
-                        <div key={sk} className={`schedv2-grid-cell body ${di===5?"sat":""} ${isOver?"drop-target":""}`}
-                          onDragOver={e=>onCellDragOver(e,sk)} onDragLeave={onCellDragLeave} onDrop={e=>onCellDrop(e,sk)}>
-                          {cls.map(l=><LessonCard key={l.id} lesson={l} variant="grid"/>)}
-                          {isOver&&cls.length===0&&<div className="drop-placeholder">Thả vào đây</div>}
+                        <div key={sk}
+                          className={`schedv2-grid-cell body ${di === 5 ? "sat" : ""} ${isOver ? "drop-target" : ""}`}
+                          onDragOver={(e) => onCellDragOver(e, sk)}
+                          onDragLeave={onCellDragLeave}
+                          onDrop={(e) => onCellDrop(e, sk)}
+                        >
+                          {cls.map((l) => <LessonCard key={l.id} lesson={l} variant="grid" />)}
+                          {isOver && cls.length === 0 && <div className="drop-placeholder">Thả vào đây</div>}
                         </div>
                       );
                     })}
@@ -427,11 +426,11 @@ export default function SchedulingSystem() {
           </div>
         </section>
 
-        {/* Right panel */}
+        {/* Right panel: Stats */}
         <aside className="schedv2-panel right">
           <div className="panel-header"><span>📊 Thống kê</span></div>
           <div className="panel-score">
-            <div className={`score-box ${apiScore.hard<0?"warn":"ok"}`}><span>HARD</span><strong>{apiScore.hard}</strong></div>
+            <div className={`score-box ${apiScore.hard < 0 ? "warn" : "ok"}`}><span>HARD</span><strong>{apiScore.hard}</strong></div>
             <div className="score-box soft"><span>SOFT</span><strong>{apiScore.soft}</strong></div>
           </div>
           <div className="panel-stats">
@@ -439,14 +438,15 @@ export default function SchedulingSystem() {
             <div className="stat-item placed"><span className="stat-label">Đã xếp</span><span className="stat-value">{allPlaced.length}</span></div>
             <div className="stat-item pending"><span className="stat-label">Chờ xếp</span><span className="stat-value">{allUnassigned.length}</span></div>
           </div>
-          {lessons.length>0&&(
+          {lessons.length > 0 && (
             <div className="panel-progress">
-              <div className="progress-bar"><div className="progress-fill" style={{width:`${lessons.length?(allPlaced.length/lessons.length*100):0}%`}}/></div>
-              <span className="progress-text">{lessons.length?Math.round(allPlaced.length/lessons.length*100):0}% hoàn thành</span>
+              <div className="progress-bar"><div className="progress-fill" style={{ width: `${lessons.length ? (allPlaced.length / lessons.length * 100) : 0}%` }} /></div>
+              <span className="progress-text">{lessons.length ? Math.round(allPlaced.length / lessons.length * 100) : 0}% hoàn thành</span>
             </div>
           )}
-          {/* Conflict panel */}
-          <ConflictPanel conflicts={conflicts} onHighlightLessons={ids=>setHighlightedIds(new Set(ids))} />
+          <div className="panel-log">
+            {isSolving ? "⏳ Đang gọi API..." : solveMessage?.text || (scheduleState !== "empty" ? "📋 Sẵn sàng. Kéo thả hoặc nhấn xếp tự động." : "Hãy tải dữ liệu để bắt đầu.")}
+          </div>
         </aside>
       </div>
     </div>
