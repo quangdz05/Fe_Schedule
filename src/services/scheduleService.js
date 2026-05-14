@@ -1,160 +1,203 @@
-/**
- * scheduleService.js — v2 API (async job-based workflow)
- * Swagger: /api/schedule/*
- */
 import { authHeaders } from "./authService";
 import { BASE_URL } from "../data/api/api_config";
+import { SolveRequest, EvaluateMoveRequest, LessonDetailRequest } from "../domain/DTO/ScheduleScenarioRequest";
 import { SolveStatus } from "../constants/enums";
 
-/* ─────────────────────────────────────────────────────────
- * 1. GET /api/schedule/pending-sections
- *    Trả về danh sách course sections chưa được xếp lịch
- * ───────────────────────────────────────────────────────── */
-async function handleResponse(res) {
+// ─── Shared fetch helper ───────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      ...authHeaders(),
+      ...(options.headers || {}),
+    },
+  });
+
   if (!res.ok) {
-    const txt = await res.text().catch(() => "");
-    throw new Error(`API Error (${res.status}): ${txt}`);
+    let msg = `HTTP ${res.status}`;
+    try {
+      const errBody = await res.json();
+      msg = errBody?.message || errBody?.title || JSON.stringify(errBody);
+    } catch {
+      msg = (await res.text()) || msg;
+    }
+    throw new Error(msg);
   }
+
+  // 204 No Content
+  if (res.status === 204) return null;
+
   const json = await res.json();
-  // Nếu có wrapper { success: true, data: ... } thì lấy data
-  if (json && Object.prototype.hasOwnProperty.call(json, 'data') && json.success !== undefined) {
+
+  // Backend wraps every response in { success, data, message }.
+  // Unwrap automatically so callers get the real payload.
+  if (json && typeof json === "object" && "data" in json && "success" in json) {
     return json.data;
   }
   return json;
 }
 
+// ─── 1. GET /api/schedule/pending-sections ────────────────────────────────
+/**
+ * Lấy danh sách course sections chưa có lịch.
+ * @returns {Promise<Array>} mảng PendingSection objects từ API
+ */
 export async function getPendingSections() {
-  const res = await fetch(`${BASE_URL}/api/schedule/pending-sections`, {
-    method: "GET",
-    headers: { ...authHeaders(), accept: "application/json" },
-  });
-  return handleResponse(res);
+  const res = await apiFetch("/api/schedule/pending-sections");
+  if (!res) return [];
+
+  // Dang 1: mang truc tiep
+  if (Array.isArray(res)) return res;
+
+  // Dang 2 (backend chuan): { success, data: { items: [...] } }
+  if (res.data?.items && Array.isArray(res.data.items)) return res.data.items;
+
+  // Dang 3: { data: [...] }
+  if (Array.isArray(res.data)) return res.data;
+
+  // Dang 4: { items: [...] } phang
+  if (Array.isArray(res.items)) return res.items;
+
+  // Last resort: tim key dau tien la array
+  const firstArr = Object.values(res).find(v => Array.isArray(v));
+  if (firstArr) return firstArr;
+
+  // Neu res.data la object co items
+  if (res.data && typeof res.data === "object") {
+    const nested = Object.values(res.data).find(v => Array.isArray(v));
+    if (nested) return nested;
+  }
+
+  return [];
 }
 
-/* ─────────────────────────────────────────────────────────
- * 2. POST /api/schedule/solve
- *    Gửi yêu cầu solve → nhận { jobId }
- * ───────────────────────────────────────────────────────── */
+// ─── 2. POST /api/schedule/solve ──────────────────────────────────────────
+/**
+ * Gửi yêu cầu solve, nhận jobId ngay lập tức (async).
+ * @param {string} name - tên kịch bản
+ * @param {number[]} courseSectionIds - danh sách IDs sections cần xếp
+ * @returns {Promise<{ jobId: string }>}
+ */
 export async function solveSchedule(name, courseSectionIds) {
-  const body = { name, courseSectionIds };
-  const res = await fetch(`${BASE_URL}/api/schedule/solve`, {
+  const body = new SolveRequest({ name, courseSectionIds });
+  return apiFetch("/api/schedule/solve", {
     method: "POST",
-    headers: {
-      ...authHeaders(),
-      "Content-Type": "application/json",
-      accept: "application/json",
-    },
     body: JSON.stringify(body),
   });
-  return handleResponse(res);
 }
 
-/* ─────────────────────────────────────────────────────────
- * 3. GET /api/schedule/solve/{jobId}
- *    Poll trạng thái job: { status, progress, result, ... }
- * ───────────────────────────────────────────────────────── */
+// ─── 3. GET /api/schedule/solve/{jobId} ──────────────────────────────────
+/**
+ * Poll trạng thái job.
+ * @returns {Promise<{ status: string, progressPercent: number, schedule?: object, hardScore?: number, softScore?: number }>}
+ */
 export async function pollSolveStatus(jobId) {
-  const res = await fetch(`${BASE_URL}/api/schedule/solve/${encodeURIComponent(jobId)}`, {
-    method: "GET",
-    headers: { ...authHeaders(), accept: "application/json" },
-  });
-  return handleResponse(res);
+  return apiFetch(`/api/schedule/solve/${jobId}`);
 }
 
-/* ─────────────────────────────────────────────────────────
- * 4. GET /api/schedule/result/{scenarioId}
- *    Load lịch đã lưu từ DB theo scenarioId
- * ───────────────────────────────────────────────────────── */
+// ─── 4. GET /api/schedule/result/{scenarioId} ────────────────────────────
+/**
+ * Load lịch đã lưu từ DB theo scenarioId.
+ * @returns {Promise<{ schedule: object, hardScore: number, softScore: number }>}
+ */
 export async function getScheduleResult(scenarioId) {
-  if (!scenarioId) throw new Error("Thiếu scenarioId để lấy kết quả.");
-  const res = await fetch(`${BASE_URL}/api/schedule/result/${encodeURIComponent(scenarioId)}`, {
-    method: "GET",
-    headers: { ...authHeaders(), accept: "application/json" },
-  });
-  return handleResponse(res);
+  if (!scenarioId) throw new Error("Thiếu scenarioId.");
+  return apiFetch(`/api/schedule/result/${scenarioId}`);
 }
 
-/* ─────────────────────────────────────────────────────────
- * 5. POST /api/schedule/evaluate-move
- *    Đánh giá drag-drop trước khi commit
- * ───────────────────────────────────────────────────────── */
+// ─── 5. POST /api/schedule/evaluate-move ────────────────────────────────
+/**
+ * Đánh giá drag-drop trước khi commit.
+ * @param {string} sessionId
+ * @param {{ lessonId: number, newTimeSlotId: number|null, newRoomId: number|null }[]} moves
+ * @returns {Promise<{ deltaHardScore: number, deltaSoftScore: number, addedConflicts: object[], resolvedConflicts: object[] }>}
+ */
 export async function evaluateMove(sessionId, moves) {
-  const body = { sessionId, moves };
-  const res = await fetch(`${BASE_URL}/api/schedule/evaluate-move`, {
+  const body = new EvaluateMoveRequest({ sessionId, moves });
+  return apiFetch("/api/schedule/evaluate-move", {
     method: "POST",
-    headers: {
-      ...authHeaders(),
-      "Content-Type": "application/json",
-      accept: "application/json",
-    },
     body: JSON.stringify(body),
   });
-  return handleResponse(res);
 }
 
-/* ─────────────────────────────────────────────────────────
- * 6. POST /api/schedule/hover-lesson
- *    Lấy chi tiết lesson khi hover (multi-teacher, conflicts)
- * ───────────────────────────────────────────────────────── */
+// ─── 6. POST /api/schedule/hover-lesson ─────────────────────────────────
+/**
+ * Lấy chi tiết lesson khi hover (multi-teacher, conflicts...).
+ * @returns {Promise<object>} lesson detail DTO
+ */
 export async function getLessonDetail(sessionId, lessonId) {
-  const body = { sessionId, lessonId };
-  const res = await fetch(`${BASE_URL}/api/schedule/hover-lesson`, {
+  const body = new LessonDetailRequest({ sessionId, lessonId });
+  return apiFetch("/api/schedule/hover-lesson", {
     method: "POST",
-    headers: {
-      ...authHeaders(),
-      "Content-Type": "application/json",
-      accept: "application/json",
-    },
     body: JSON.stringify(body),
   });
-  return handleResponse(res);
 }
 
-/* ─────────────────────────────────────────────────────────
- * 7. POST /api/schedule/sessions/{sessionId}/save
- *    Lưu lịch từ memory vào DB
- * ───────────────────────────────────────────────────────── */
+// ─── 7. POST /api/schedule/sessions/{id}/save ────────────────────────────
+/**
+ * Lưu lịch từ memory vào DB.
+ * @param {string} sessionId
+ * @returns {Promise<null|object>}
+ */
 export async function saveSession(sessionId) {
-  if (!sessionId) throw new Error("Thiếu sessionId để lưu.");
-  const res = await fetch(`${BASE_URL}/api/schedule/sessions/${encodeURIComponent(sessionId)}/save`, {
+  if (!sessionId) throw new Error("Thiếu sessionId.");
+  return apiFetch(`/api/schedule/sessions/${sessionId}/save`, {
     method: "POST",
-    headers: { ...authHeaders(), accept: "application/json" },
   });
-  return handleResponse(res).catch(() => ({ success: true }));
 }
 
-/* ─────────────────────────────────────────────────────────
- * HELPER: waitForSolveResult
- * Poll mỗi 3s cho đến khi status = Completed / Failed
- * onProgress(pct: number, phase: string) được gọi mỗi lần poll
- * ───────────────────────────────────────────────────────── */
-const PHASE_LABELS = {
-  [SolveStatus.Queued]:    "Đang xếp hàng chờ...",
-  [SolveStatus.Running]:   "Đang xếp lịch...",
-  [SolveStatus.Completed]: "Hoàn tất!",
-  [SolveStatus.Failed]:    "Thất bại",
-};
+// ─── Helper: Poll cho đến khi hoàn thành ─────────────────────────────────
+const POLL_INTERVAL_MS = 3000;
+const MAX_POLL_ATTEMPTS = 120; // 6 phút max
 
-export function waitForSolveResult(jobId, onProgress, intervalMs = 3000) {
+/**
+ * Poll solve status cho đến khi Completed hoặc Failed.
+ * @param {string} jobId
+ * @param {function(pct: number, phase: string): void} onProgress - callback mỗi lần poll
+ * @returns {Promise<{ schedule: object, hardScore: number, softScore: number }>}
+ */
+export function waitForSolveResult(jobId, onProgress) {
   return new Promise((resolve, reject) => {
-    const poll = async () => {
+    let attempts = 0;
+
+    const phaseLabel = (status, pct) => {
+      if (pct === 0 || status === SolveStatus.Queued) return "Đang khởi tạo...";
+      if (status === SolveStatus.Running && pct < 50) return "Đang phân tích dữ liệu...";
+      if (status === SolveStatus.Running) return "Đang xếp lịch...";
+      if (status === SolveStatus.Completed) return "Hoàn tất!";
+      return "Đang xử lý...";
+    };
+
+    const tick = async () => {
+      attempts++;
+      if (attempts > MAX_POLL_ATTEMPTS) {
+        return reject(new Error("Timeout: Solver mất quá nhiều thời gian."));
+      }
+
       try {
-        const data = await pollSolveStatus(jobId);
-        const status = data.status ?? data.Status;
-        const pct = data.progress ?? data.Progress ?? 0;
-        const phase = PHASE_LABELS[status] ?? "Đang xử lý...";
+        const result = await pollSolveStatus(jobId);
+        const status = result?.status ?? "";
+        const pct = result?.progressPercent ?? result?.progress ?? 0;
 
-        if (typeof onProgress === "function") onProgress(pct, phase);
+        if (typeof onProgress === "function") {
+          onProgress(pct, phaseLabel(status, pct));
+        }
 
-        if (status === SolveStatus.Completed) return resolve(data);
-        if (status === SolveStatus.Failed)
-          return reject(new Error(data.error ?? data.message ?? "Solver thất bại"));
+        if (status === SolveStatus.Completed) {
+          return resolve(result);
+        }
+        if (status === SolveStatus.Failed) {
+          return reject(new Error(result?.error || "Solver thất bại."));
+        }
 
-        setTimeout(poll, intervalMs);
+        setTimeout(tick, POLL_INTERVAL_MS);
       } catch (err) {
         reject(err);
       }
     };
-    poll();
+
+    tick();
   });
 }

@@ -1,9 +1,6 @@
-/**
- * DTOs cho API v2 — SortSchedule Backend
- * Swagger: POST /api/schedule/solve, POST /api/schedule/evaluate-move, POST /api/schedule/hover-lesson
+/** POST /api/schedule/solve
+ * @see SolveScheduleRequest in swagger.json
  */
-
-/** POST /api/schedule/solve — SolveScheduleRequest */
 export class SolveRequest {
   constructor({ name = "New Schedule", courseSectionIds = [] } = {}) {
     this.name = name;
@@ -11,24 +8,20 @@ export class SolveRequest {
   }
 }
 
-/** POST /api/schedule/evaluate-move — EvaluateMoveRequest */
+/** POST /api/schedule/evaluate-move
+ * @see EvaluateMoveRequest in swagger.json
+ */
 export class EvaluateMoveRequest {
-  /**
-   * @param {string} sessionId
-   * @param {{ lessonId: number, newTimeSlotId: number|null, newRoomId: number|null }[]} moves
-   */
   constructor({ sessionId, moves = [] } = {}) {
     this.sessionId = sessionId;
-    this.moves = moves;
+    this.moves = moves; // [{ lessonId, newTimeSlotId, newRoomId }]
   }
 }
 
-/** POST /api/schedule/hover-lesson — LessonDetailRequest */
+/** POST /api/schedule/hover-lesson
+ * @see LessonDetailRequest in swagger.json
+ */
 export class LessonDetailRequest {
-  /**
-   * @param {string} sessionId
-   * @param {number} lessonId
-   */
   constructor({ sessionId, lessonId } = {}) {
     this.sessionId = sessionId;
     this.lessonId = lessonId;

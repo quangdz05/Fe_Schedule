@@ -1,107 +1,102 @@
-/**
- * ConflictPanel.jsx — Phase 3.3
- * Hiển thị conflicts từ schedule.conflicts[], nhóm theo level, click highlight lessons.
- */
 import { useMemo, useState } from "react";
-import { ConflictLevel, ConflictLevelLabels, ConflictLevelKeys } from "../../constants/enums";
+import { ConflictLevel, ConflictLevelLabels, ConflictTypeLabelMap } from "../../constants/enums";
 
-const LEVEL_ORDER = [ConflictLevel.Hard, ConflictLevel.Warning, ConflictLevel.Soft];
-
+/**
+ * ConflictPanel — hiển thị danh sách conflicts từ kết quả solve.
+ * Props:
+ *   conflicts[]                — mảng ScheduleConflictDto
+ *   onHighlightLessons(ids[])  — callback khi click conflict item
+ */
 export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
-  const [expanded, setExpanded] = useState(new Set([ConflictLevel.Hard]));
+  const [expanded, setExpanded] = useState({ 0: true, 1: false, 2: false });
 
   const grouped = useMemo(() => {
-    const g = { [ConflictLevel.Hard]: [], [ConflictLevel.Warning]: [], [ConflictLevel.Soft]: [] };
-    for (const c of conflicts) {
-      const lvl = c.level ?? c.Level ?? ConflictLevel.Soft;
-      if (g[lvl]) g[lvl].push(c);
-    }
-    return g;
+    const groups = { 0: [], 1: [], 2: [] };
+    conflicts.forEach((c) => {
+      const lvl = c.level ?? 0;
+      if (groups[lvl]) groups[lvl].push(c);
+    });
+    return groups;
   }, [conflicts]);
 
-  const totalHard    = grouped[ConflictLevel.Hard].length;
-  const totalWarning = grouped[ConflictLevel.Warning].length;
-  const totalSoft    = grouped[ConflictLevel.Soft].length;
+  const badge = (lvl) => grouped[lvl]?.length || 0;
+  const total = conflicts.length;
 
-  const toggleSection = (level) => {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      next.has(level) ? next.delete(level) : next.add(level);
-      return next;
-    });
+  const levelMeta = {
+    0: { cls: "hard", icon: "[!]", label: "Nghiem trong" },
+    1: { cls: "soft", icon: "[i]", label: "Goi y" },
+    2: { cls: "warning", icon: "[!]", label: "Canh bao" },
   };
 
-  const handleConflictClick = (conflict) => {
-    const ids = conflict.affectedEntityIds ?? conflict.AffectedEntityIds ?? [];
-    onHighlightLessons?.(ids.map(String));
+  const handleItemClick = (conflict) => {
+    if (typeof onHighlightLessons === "function") {
+      onHighlightLessons(conflict.affectedEntityIds ?? []);
+    }
   };
 
-  if (conflicts.length === 0) {
+  const toggleGroup = (lvl) =>
+    setExpanded((prev) => ({ ...prev, [lvl]: !prev[lvl] }));
+
+  if (total === 0) {
     return (
-      <div className="conflict-panel">
-        <div className="conflict-panel-header">
-          <span>🚦 Xung đột lịch</span>
+      <div className="conflict-panel empty">
+        <div className="cp-header">Conflicts</div>
+        <div className="cp-no-conflict">
+          <strong>Không có conflict!</strong>
+          <p>Lịch hoàn toàn hợp lệ.</p>
         </div>
-        <div className="conflict-empty">✅ Không có xung đột nào!</div>
       </div>
     );
   }
 
   return (
     <div className="conflict-panel">
-      {/* Header with badge counts */}
-      <div className="conflict-panel-header">
-        <span>🚦 Xung đột lịch</span>
-        <div className="conflict-badges">
-          {totalHard > 0 && <span className="conflict-badge hard">⛔ {totalHard}</span>}
-          {totalWarning > 0 && <span className="conflict-badge warning">⚠️ {totalWarning}</span>}
-          {totalSoft > 0 && <span className="conflict-badge soft">ℹ️ {totalSoft}</span>}
+      <div className="cp-header">
+        <span>Conflicts</span>
+        <div className="cp-badges">
+          {badge(0) > 0 && <span className="conflict-badge hard">[!] {badge(0)}</span>}
+          {badge(2) > 0 && <span className="conflict-badge warning">[!] {badge(2)}</span>}
+          {badge(1) > 0 && <span className="conflict-badge soft">[i] {badge(1)}</span>}
         </div>
       </div>
 
-      {/* Grouped sections */}
-      {LEVEL_ORDER.map((level) => {
-        const items = grouped[level];
-        if (items.length === 0) return null;
-        const key = ConflictLevelKeys[level];
-        const label = ConflictLevelLabels[level];
-        const isOpen = expanded.has(level);
-
+      {[0, 2, 1].map((lvl) => {
+        if (grouped[lvl].length === 0) return null;
+        const meta = levelMeta[lvl];
+        const isOpen = expanded[lvl];
         return (
-          <div key={level} className={`conflict-group ${key}`}>
+          <div key={lvl} className={`cp-group ${meta.cls}`}>
             <button
               type="button"
-              className="conflict-group-toggle"
-              onClick={() => toggleSection(level)}
+              className="cp-group-header"
+              onClick={() => toggleGroup(lvl)}
             >
-              <span>{label}</span>
-              <span className="conflict-group-count">{items.length}</span>
-              <span className="conflict-group-chevron">{isOpen ? "▲" : "▼"}</span>
+              <span>{meta.icon} {meta.label}</span>
+              <span className="cp-group-count">{grouped[lvl].length}</span>
+              <span className="cp-chevron">{isOpen ? "▲" : "▼"}</span>
             </button>
-
             {isOpen && (
-              <ul className="conflict-list">
-                {items.map((c) => {
-                  const affectedIds = c.affectedEntityIds ?? c.AffectedEntityIds ?? [];
-                  const desc = c.description ?? c.Description ?? `Xung đột #${c.id}`;
-                  return (
-                    <li
-                      key={c.id ?? Math.random()}
-                      className={`conflict-item ${key}`}
-                      title={affectedIds.length > 0 ? "Click để highlight lesson liên quan" : undefined}
-                      onClick={() => handleConflictClick(c)}
-                      style={{ cursor: affectedIds.length > 0 ? "pointer" : "default" }}
-                    >
-                      <span className="conflict-desc">{desc}</span>
-                      {affectedIds.length > 0 && (
-                        <span className="conflict-affected">
-                          🔍 {affectedIds.length} tiết liên quan
-                        </span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="cp-group-items">
+                {grouped[lvl].map((c) => (
+                  <div
+                    key={c.id}
+                    className={`conflict-item ${meta.cls}`}
+                    title="Click để highlight các lesson liên quan"
+                    onClick={() => handleItemClick(c)}
+                  >
+                    <div className="ci-desc">
+                      {c.description || ConflictTypeLabelMap[c.conflictType] || "Conflict không xác định"}
+                    </div>
+                    {c.affectedEntityIds?.length > 0 && (
+                      <div className="ci-entities">
+                        {c.affectedEntityIds.map((id) => (
+                          <span key={id} className="ci-entity-id">#{id}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         );

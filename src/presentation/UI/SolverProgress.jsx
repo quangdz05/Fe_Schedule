@@ -1,97 +1,111 @@
-/**
- * SolverProgress.jsx — Phase 3.2
- * Overlay hiển thị khi solver đang chạy: progress bar + phase label + spinner.
- * Nội bộ poll pollSolveStatus mỗi 3s.
- */
 import { useEffect, useRef, useState } from "react";
-import { waitForSolveResult } from "../../services/scheduleService";
+import { pollSolveStatus } from "../../services/scheduleService";
+import { SolveStatus } from "../../constants/enums";
 
-const PHASE_ICONS = {
-  "Đang xếp hàng chờ...": "🕐",
-  "Đang xếp lịch...":     "⚙️",
-  "Hoàn tất!":            "✅",
-  "Thất bại":             "❌",
-};
-
+/**
+ * SolverProgress — overlay hiển thị tiến trình solve.
+ * Props:
+ *   jobId                      — job đang poll
+ *   onCompleted(result)        — gọi khi Completed
+ *   onFailed(error)            — gọi khi Failed
+ */
 export default function SolverProgress({ jobId, onCompleted, onFailed }) {
-  const [pct, setPct]     = useState(0);
-  const [phase, setPhase] = useState("Đang xếp hàng chờ...");
-  const [elapsed, setElapsed] = useState(0);
-  const cancelRef = useRef(false);
-  const timerRef  = useRef(null);
+  const [pct, setPct] = useState(0);
+  const [phase, setPhase] = useState("Đang khởi tạo...");
+  const [dots, setDots] = useState(0);
+  const stopRef = useRef(false);
 
-  // Elapsed timer
+  // Animated dots
   useEffect(() => {
-    timerRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
-    return () => clearInterval(timerRef.current);
+    const t = setInterval(() => setDots((d) => (d + 1) % 4), 500);
+    return () => clearInterval(t);
   }, []);
 
-  // Poll loop via waitForSolveResult
   useEffect(() => {
-    cancelRef.current = false;
+    if (!jobId) return;
+    stopRef.current = false;
+    let attempts = 0;
+    const MAX = 120;
+    const INTERVAL = 3000;
 
-    waitForSolveResult(
-      jobId,
-      (progress, phaseLabel) => {
-        if (cancelRef.current) return;
-        setPct(Math.max(0, Math.min(100, progress)));
-        setPhase(phaseLabel);
-      },
-      3000
-    )
-      .then((result) => {
-        if (!cancelRef.current) {
+    const phaseLabel = (status, progress) => {
+      if (status === SolveStatus.Queued || progress === 0) return "Đang khởi tạo";
+      if (status === SolveStatus.Running && progress < 30) return "Phân tích dữ liệu";
+      if (status === SolveStatus.Running && progress < 70) return "Đang xếp lịch";
+      if (status === SolveStatus.Running) return "Tối ưu hóa";
+      if (status === SolveStatus.Completed) return "Hoàn tất!";
+      return "Đang xử lý";
+    };
+
+    const tick = async () => {
+      if (stopRef.current) return;
+      attempts++;
+      if (attempts > MAX) {
+        onFailed?.(new Error("Timeout: quá thời gian chờ."));
+        return;
+      }
+      try {
+        const result = await pollSolveStatus(jobId);
+        const status = result?.status ?? "";
+        // Backend: progress is nested { percentage, phase, iteration, maxIterations }
+        const progressObj = result?.progress;
+        const progress = progressObj?.percentage ?? progressObj ?? 0;
+
+        setPct(progress);
+        setPhase(phaseLabel(status, progress));
+
+        if (status === SolveStatus.Completed) {
           setPct(100);
           setPhase("Hoàn tất!");
-          clearInterval(timerRef.current);
-          setTimeout(() => onCompleted?.(result), 600);
+          onCompleted?.(result);
+          return;
         }
-      })
-      .catch((err) => {
-        if (!cancelRef.current) {
-          setPhase("Thất bại");
-          clearInterval(timerRef.current);
-          onFailed?.(err);
+        if (status === SolveStatus.Failed) {
+          onFailed?.(new Error(result?.error || "Solver thất bại."));
+          return;
         }
-      });
 
-    return () => {
-      cancelRef.current = true;
+        if (!stopRef.current) {
+          setTimeout(tick, INTERVAL);
+        }
+      } catch (err) {
+        onFailed?.(err);
+      }
     };
-  }, [jobId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const icon = PHASE_ICONS[phase] ?? "⚙️";
-  const fmtTime = `${String(Math.floor(elapsed / 60)).padStart(2, "0")}:${String(elapsed % 60).padStart(2, "0")}`;
+    tick();
+    return () => { stopRef.current = true; };
+  }, [jobId]);
 
   return (
     <div className="solver-progress-overlay">
       <div className="solver-progress-card">
-        {/* Spinner */}
-        <div className="sp-spinner-wrap">
-          <div className="sp-ring-spinner" />
-          <span className="sp-phase-icon">{icon}</span>
+        <div className="sp-spinner-ring" />
+        <div className="sp-info">
+          <div className="sp-phase">
+            {phase}{"...".slice(0, dots + 1)}
+          </div>
+          <div className="sp-pct-label">{pct}%</div>
         </div>
-
-        {/* Title */}
-        <div className="sp-title">Đang xếp lịch tự động</div>
-        <div className="sp-job-id">Job: <code>{jobId}</code></div>
-
-        {/* Phase */}
-        <div className="sp-phase-label">{phase}</div>
-
-        {/* Progress bar */}
-        <div className="sp-bar-wrap">
+        <div className="progress-bar-track">
           <div
-            className="sp-bar-fill progress-bar-animated"
+            className="progress-bar-animated"
             style={{ width: `${pct}%` }}
           />
         </div>
-        <div className="sp-pct-text">{pct}%</div>
-
-        {/* Elapsed */}
-        <div className="sp-elapsed">⏱ {fmtTime} đã trôi qua</div>
-
-        <div className="sp-hint">Solver đang tối ưu hóa bằng Tabu Search…</div>
+        <div className="sp-steps">
+          {["Khởi tạo", "Phân tích", "Xếp lịch", "Tối ưu", "Hoàn tất"].map((step, i) => {
+            const threshold = i * 25;
+            const done = pct >= threshold + 20;
+            const active = pct >= threshold && !done;
+            return (
+              <div key={step} className={`sp-step ${done ? "done" : active ? "active" : ""}`}>
+                <div className="sp-step-dot" />
+                <span>{step}</span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
