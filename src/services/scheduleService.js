@@ -83,6 +83,7 @@ export async function getPendingSections() {
 export async function solveSchedule(name, courseSectionIds) {
   const body = new SolveRequest({ name, courseSectionIds });
   return apiFetch("/api/schedule/solve", {
+
     method: "POST",
     body: JSON.stringify(body),
   });

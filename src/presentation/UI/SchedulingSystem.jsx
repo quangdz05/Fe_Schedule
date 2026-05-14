@@ -74,11 +74,10 @@ const inferMajor = (subjectName, groupName) => {
   return "GEN";
 };
 
-// Parse year from group name e.g. "BCSE-Y3" → 3
-const parseYear = (groupName) => {
-  if (!groupName) return null;
-  const m = String(groupName).match(/-Y(\d)/i);
-  return m ? Number(m[1]) : null;
+// Parse year from group.year field (from API)
+const parseYear = (year) => {
+  const v = Number(year);
+  return Number.isNaN(v) || v === 0 ? null : v;
 };
 
 // Detect shared course: section has groups from 2+ different majors
@@ -133,8 +132,8 @@ const buildLessonsFromSchedule = (schedule, assignSlots = true) => {
     const sec = courseName.match(/HP\d+/i);
     const tn = teacherNames.join(", ") || `GV ${lesson.teacherId}`;
     const isReq = (course?.courseType ?? 0) === 0;
-    // Parse year from primary group name
-    const year = parseYear(group?.name);
+    // Get year from primary student group
+    const year = parseYear(group?.year);
     // Shared: section has >1 group from different majors
     const isShared = isSharedSection(section);
     return {
@@ -231,6 +230,69 @@ export default function SchedulingSystem() {
     });
     return map;
   }, [placedLessons]);
+
+  // ─── Compute horizontal layout for concurrent lessons (Google Calendar style) ───
+  // For each day, run an interval-scheduling algorithm to assign colIndex / totalCols
+  // so overlapping lessons are displayed side-by-side instead of stacking.
+  const dayLayoutMap = useMemo(() => {
+    const result = {}; // lessonId → { colIndex, totalCols }
+
+    // Group placed lessons by dayIndex
+    const byDay = {};
+    placedLessons.forEach((l) => {
+      if (!l.slotId) return;
+      const [diStr] = l.slotId.split("-");
+      const di = Number(diStr);
+      if (!byDay[di]) byDay[di] = [];
+      byDay[di].push(l);
+    });
+
+    Object.entries(byDay).forEach(([, dayLessons]) => {
+      // Build intervals: [startPeriod, endPeriod (exclusive)]
+      const withInterval = dayLessons.map((l) => {
+        const pid = Number(l.slotId.split("-")[1]);
+        const dur = l.duration || 1;
+        return { l, start: pid, end: pid + dur };
+      });
+
+      // Sort by start
+      withInterval.sort((a, b) => a.start - b.start);
+
+      // Greedy column assignment: cols[c] = end of last lesson in column c
+      const cols = [];
+      withInterval.forEach((item) => {
+        let placed = false;
+        for (let c = 0; c < cols.length; c++) {
+          if (cols[c] <= item.start) { // column c is free
+            item.colIndex = c;
+            cols[c] = item.end;
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          item.colIndex = cols.length;
+          cols.push(item.end);
+        }
+      });
+
+      // Second pass: find totalCols for each overlapping group
+      // For each lesson, totalCols = max colIndex among all lessons that overlap with it, +1
+      withInterval.forEach((item) => {
+        const overlapping = withInterval.filter(
+          (other) => other.start < item.end && other.end > item.start
+        );
+        item.totalCols = Math.max(...overlapping.map((o) => o.colIndex)) + 1;
+      });
+
+      withInterval.forEach((item) => {
+        result[item.l.id] = { colIndex: item.colIndex, totalCols: item.totalCols };
+      });
+    });
+
+    return result;
+  }, [placedLessons]);
+
 
   /* ─── Drag & Drop ─── */
   const onDragStart = useCallback((e, lessonId) => {
@@ -588,7 +650,7 @@ export default function SchedulingSystem() {
           ))}
         </div>
 
-        {/* Level 2: Year filter — only show when a major is selected */}
+        {/* Level 2: Year filter — only show when a major is selected and has multiple years */}
         {selectedMajor !== "ALL" && availableYears.length > 0 && (
           <div className="schedv2-filter-row">
             <span className="schedv2-filter-label">Năm</span>
@@ -599,7 +661,7 @@ export default function SchedulingSystem() {
             </button>
             {availableYears.map(yr => (
               <button key={yr} type="button"
-                className={`schedv2-filter ${selectedYear === yr ? `active year${yr}` : ""}`}
+                className={`schedv2-filter year${yr} ${selectedYear === yr ? `active year${yr}` : ""}`}
                 onClick={() => setSelectedYear(yr)}>
                 Năm {yr}
               </button>
@@ -654,40 +716,157 @@ export default function SchedulingSystem() {
             {scheduleState === "solved" && <span className="grid-head-solved">Da xep</span>}
           </div>
           <div className="schedv2-grid-wrap">
+            {/* Grid: col 1 = time label, col 2-7 = Mon-Sat
+                Rows: row 1 = header, rows 2-6 = Tiết 1-5, row 7 = break, rows 8-14 = Tiết 6-12 */}
             <div className="schedv2-grid-table"
-              style={{ gridTemplateColumns: "70px repeat(6, 1fr)", gridTemplateRows: "36px repeat(5, 60px) 30px repeat(7, 60px)" }}>
-              <div className="schedv2-grid-row header">
-                <div className="schedv2-grid-cell time">Tiết</div>
-                {DAYS.map((d, i) => <div key={d} className={`schedv2-grid-cell day ${i === 5 ? "sat" : ""}`}>{d}</div>)}
-              </div>
+              style={{
+                gridTemplateColumns: "70px repeat(6, 1fr)",
+                gridTemplateRows: "36px repeat(5, 60px) 30px repeat(7, 60px)"
+              }}>
+
+              {/* ── Header row ── */}
+              <div className="schedv2-grid-cell time" style={{ gridRow: 1, gridColumn: 1 }}>Tiết</div>
+              {DAYS.map((d, i) => (
+                <div key={d} style={{ gridRow: 1, gridColumn: i + 2 }}
+                  className={`schedv2-grid-cell day ${i === 5 ? "sat" : ""}`}>{d}</div>
+              ))}
+
+              {/* ── Time label column + empty drop cells ── */}
               {PERIODS.map((period) => {
                 const rowStart = getGridRowStart(period.id);
                 if (period.id === "break") {
-                  return <div key="break" className="schedv2-break"
-                    style={{ gridRowStart: rowStart, gridColumnStart: 1, gridColumnEnd: 8 }}>
-                    {period.time} – NGHI TRUA</div>;
+                  return (
+                    <div key="break" className="schedv2-break"
+                      style={{ gridRow: rowStart, gridColumn: "1 / 8" }}>
+                      {period.time} – NGHI TRUA
+                    </div>
+                  );
                 }
                 return (
-                  <div key={period.id} className="schedv2-grid-row" style={{ gridRowStart: rowStart }}>
-                    <div className="schedv2-grid-cell time"><strong>{period.name}</strong><span>{period.time}</span></div>
-                    {DAYS.map((_, di) => {
-                      const sk = `${di}-${period.id}`;
-                      const cls = cellMap[sk] || [];
-                      const isOver = dragOver === sk;
-                      return (
-                        <div key={sk}
-                          className={`schedv2-grid-cell body ${di === 5 ? "sat" : ""} ${isOver ? "drop-target" : ""}`}
-                          onDragOver={(e) => onCellDragOver(e, sk)}
-                          onDragLeave={onCellDragLeave}
-                          onDrop={(e) => onCellDrop(e, sk)}>
-                          {cls.map((l) => <LessonCard key={l.id} lesson={l} variant="grid" />)}
-                          {isOver && cls.length === 0 && <div className="drop-placeholder">Tha vao day</div>}
-                        </div>
-                      );
-                    })}
+                  <div key={`time-${period.id}`} className="schedv2-grid-cell time"
+                    style={{ gridRow: rowStart, gridColumn: 1 }}>
+                    <strong>{period.name}</strong>
+                    <span>{period.time}</span>
                   </div>
                 );
               })}
+
+              {/* ── Empty drop-target cells (one per period×day) ── */}
+              {PERIODS.filter(p => p.id !== "break").map((period) => {
+                const rowStart = getGridRowStart(period.id);
+                return DAYS.map((_, di) => {
+                  const sk = `${di}-${period.id}`;
+                  const isOver = dragOver === sk;
+                  const hasLesson = (cellMap[sk] || []).length > 0;
+                  return (
+                    <div key={sk}
+                      className={`schedv2-grid-cell body ${di === 5 ? "sat" : ""} ${isOver && !hasLesson ? "drop-target" : ""}`}
+                      style={{ gridRow: rowStart, gridColumn: di + 2 }}
+                      onDragOver={(e) => onCellDragOver(e, sk)}
+                      onDragLeave={onCellDragLeave}
+                      onDrop={(e) => onCellDrop(e, sk)}>
+                      {isOver && !hasLesson && <div className="drop-placeholder">Thả vào đây</div>}
+                    </div>
+                  );
+                });
+              })}
+
+              {/* ── Placed lessons ── absolute positioning within each day column ── */}
+              {(() => {
+                // Group placed lessons by dayIndex so we render one host per (day)
+                // Each host spans the entire day column height, lessons are absolute inside
+                const byDay = {};
+                placedLessons.forEach((lesson) => {
+                  if (!lesson.slotId) return;
+                  const [diStr] = lesson.slotId.split("-");
+                  const di = Number(diStr);
+                  if (!byDay[di]) byDay[di] = [];
+                  byDay[di].push(lesson);
+                });
+
+                // ROW_H: px height per period row in the grid
+                // Grid rows: row1=header(36px), rows2-6=periods1-5(60px each),
+                //            row7=break(30px), rows8-14=periods6-12(60px each)
+                const ROW_H = 60;
+                const BREAK_H = 30;
+                const HEADER_H = 36;
+                // Total height of the "day body" area (excluding header)
+                const TOTAL_H = 5 * ROW_H + BREAK_H + 7 * ROW_H; // 5+break+7 rows
+
+                // Convert period id → top offset in px from start of day body
+                const periodToTop = (pid) => {
+                  if (pid >= 1 && pid <= 5) return (pid - 1) * ROW_H;
+                  if (pid >= 6 && pid <= 12) return 5 * ROW_H + BREAK_H + (pid - 6) * ROW_H;
+                  return 0;
+                };
+
+                return Object.entries(byDay).map(([diStr, dayLessons]) => {
+                  const di = Number(diStr);
+                  return (
+                    <div key={`day-host-${di}`}
+                      className={`schedv2-day-host ${di === 5 ? "sat" : ""}`}
+                      style={{
+                        gridRow: `2 / 15`, // span all period rows (rows 2-14)
+                        gridColumn: di + 2,
+                        position: "relative",
+                        height: TOTAL_H,
+                        pointerEvents: "none", // drop targets still below
+                        zIndex: 3,
+                      }}>
+                      {dayLessons.map((lesson) => {
+                        const pid = Number(lesson.slotId.split("-")[1]);
+                        const dur = lesson.duration || 1;
+                        const layout = dayLayoutMap[lesson.id] || { colIndex: 0, totalCols: 1 };
+                        const { colIndex, totalCols } = layout;
+
+                        const top = periodToTop(pid);
+                        // Height: sum of period heights covered, including break if spans it
+                        let heightPx = 0;
+                        for (let p = pid; p < pid + dur; p++) {
+                          if (p === 6 && pid <= 5) heightPx += BREAK_H; // crossing break
+                          heightPx += ROW_H;
+                        }
+                        // Don't cross the visual break row if lesson ends at p=5
+                        // (dur rows starting from pid, break only if crossing)
+                        // recalculate clean:
+                        heightPx = 0;
+                        for (let p = 0; p < dur; p++) {
+                          const curPid = pid + p;
+                          heightPx += ROW_H;
+                          // If this period is period 5 and next would cross into afternoon, add break
+                          if (curPid === 5 && p < dur - 1) heightPx += BREAK_H;
+                        }
+
+                        const GAP = 2; // px gap between side-by-side lessons
+                        const widthPct = 100 / totalCols;
+                        const leftPct = colIndex * widthPct;
+
+                        return (
+                          <div key={lesson.id}
+                            className="schedv2-lesson-abs"
+                            style={{
+                              position: "absolute",
+                              top: `${top}px`,
+                              height: `${heightPx - GAP}px`,
+                              left: `calc(${leftPct}% + ${colIndex * GAP}px)`,
+                              width: `calc(${widthPct}% - ${colIndex * GAP + GAP}px)`,
+                              pointerEvents: "auto",
+                              zIndex: 4,
+                              padding: "2px",
+                              boxSizing: "border-box",
+                              overflow: "hidden",
+                            }}
+                            onDragOver={(e) => onCellDragOver(e, lesson.slotId)}
+                            onDragLeave={onCellDragLeave}
+                            onDrop={(e) => onCellDrop(e, lesson.slotId)}>
+                            <LessonCard lesson={lesson} variant="grid" />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                });
+              })()}
             </div>
           </div>
         </section>

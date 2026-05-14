@@ -1,0 +1,4294 @@
+{
+    "success": true,
+    "message": "Success",
+    "data": {
+        "jobId": "334f27e5e9b8",
+        "status": "Completed",
+        "progress": {
+            "phase": "Done",
+            "iteration": 0,
+            "maxIterations": 0,
+            "percentage": 100
+        },
+        "result": {
+            "scenarioId": "334f27e5e9b8",
+            "source": "memory-session",
+            "hardScore": -70000,
+            "softScore": -10389,
+            "schedule": {
+                "id": 0,
+                "name": "",
+                "teachers": [
+                    {
+                        "id": 1,
+                        "name": "TS. Phạm Hoài Luân",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 2,
+                        "name": "GS. Satoshi Honda",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 3,
+                        "name": "GS.TS. Koichi Nomura",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 4,
+                        "name": "TS. Lê Nam Phong",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 5,
+                        "name": "ThS. Bùi Tiến Tài",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 6,
+                        "name": "TS. Nguyễn Văn Thắng",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 7,
+                        "name": "TS. Vũ Văn In",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 8,
+                        "name": "TS. Lê Kim Quy",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 9,
+                        "name": "TS. Vũ Quang Việt",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 10,
+                        "name": "PGS.TS. Nguyễn Đình Thắng",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 11,
+                        "name": "TS. Chu Thị Minh Huệ",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 12,
+                        "name": "TS. Trương Chí Công",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 13,
+                        "name": "TS. Lê Hồng Thái",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 14,
+                        "name": "TS. Bùi Huy Kiên",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 15,
+                        "name": "ThS. Nguyễn Tiến Đạt",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 16,
+                        "name": "TS. Đặng Minh Hiếu",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 17,
+                        "name": "ThS. Nguyễn Thị Ngân, Kỹ sư Hoàng Tâm Anh",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 18,
+                        "name": "TS. Trần Thị Điểm",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 19,
+                        "name": "TS. Nguyễn Ngọc Vinh",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 20,
+                        "name": "TS. Dương Hữu Toàn",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 21,
+                        "name": "ThS. Nguyễn Thị Ngân, Kỹ sư Ngô Đinh Bá",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 22,
+                        "name": "PGS. TS. Nguyễn Đình Thắng",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 23,
+                        "name": "TS. Phạm Đình Hải",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 24,
+                        "name": "TS. Phạm Đình Nguyện",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 25,
+                        "name": "TS. Phan Đình Hiếu",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 26,
+                        "name": "TS. Nguyễn Văn Tình (học từ tuần thứ 9, 30 tiết thực hành)",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 27,
+                        "name": "TS. Tạ Quang Ngọc",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 28,
+                        "name": "TS. Phạm Đức Thọ",
+                        "specificRequirements": null,
+                        "teacherType": 0,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 29,
+                        "name": "TS. Nguyễn Tiến Dũng",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 30,
+                        "name": "TS. Hoàng Quốc Tuấn",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 31,
+                        "name": "ThS. Trần Thị Thanh Hoa",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 32,
+                        "name": "GS. Tomoki Nakamaru",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 33,
+                        "name": "TS. Hoàng Thị Thu Duyến",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 34,
+                        "name": "TS. Katsutoshi Onaka",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 35,
+                        "name": "TS. Nguyễn Mạnh Thắng",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 36,
+                        "name": "TS. Mai Chí Thọ",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 37,
+                        "name": "TS. Trương Minh Đức",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 38,
+                        "name": "TS. Nguyễn Xuân Bang",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 39,
+                        "name": "TS. Vũ Hoàng Gia (học từ tuần thứ 9, 30 tiết thực hành)",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 40,
+                        "name": "TS. Nguyễn Đức Trung",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    },
+                    {
+                        "id": 41,
+                        "name": "TS.Vũ Hoàng Gia (học từ tuần thứ 9, 30 tiết thực hành)",
+                        "specificRequirements": null,
+                        "teacherType": 1,
+                        "timezone": null,
+                        "maxSlotsPerWeek": 20
+                    }
+                ],
+                "rooms": [
+                    {
+                        "id": 1,
+                        "name": "MĐ-409",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 2,
+                        "name": "MĐ-402",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 3,
+                        "name": "Phòng 3204-GD3 Hòa Lạc",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 4,
+                        "name": "MĐ-403",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 5,
+                        "name": "MĐ-612",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 6,
+                        "name": "MĐ-508",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 7,
+                        "name": "MĐ-613",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 8,
+                        "name": "MĐ-607",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 9,
+                        "name": "MĐ-504",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 10,
+                        "name": "MĐ-404",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 11,
+                        "name": "MĐ-401",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 12,
+                        "name": "MĐ-406",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 13,
+                        "name": "MĐ-503",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 14,
+                        "name": "MĐ-407",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 15,
+                        "name": "MĐ-509",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 16,
+                        "name": "MĐ-410",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 17,
+                        "name": "MĐ-601",
+                        "capacity": 40,
+                        "roomType": 0
+                    },
+                    {
+                        "id": 18,
+                        "name": "MĐ-405",
+                        "capacity": 40,
+                        "roomType": 0
+                    }
+                ],
+                "studentGroups": [
+                    {
+                        "id": 1,
+                        "name": "BCSE-Y3",
+                        "size": 30,
+                        "majorId": 1,
+                        "year": 3
+                    },
+                    {
+                        "id": 2,
+                        "name": "MJM-Y3",
+                        "size": 30,
+                        "majorId": 2,
+                        "year": 3
+                    },
+                    {
+                        "id": 3,
+                        "name": "EFTH-Y3",
+                        "size": 30,
+                        "majorId": 3,
+                        "year": 3
+                    },
+                    {
+                        "id": 4,
+                        "name": "ESAS-Y3",
+                        "size": 30,
+                        "majorId": 4,
+                        "year": 3
+                    },
+                    {
+                        "id": 5,
+                        "name": "ECE-Y3",
+                        "size": 30,
+                        "majorId": 5,
+                        "year": 3
+                    },
+                    {
+                        "id": 6,
+                        "name": "BCSE-Y2",
+                        "size": 25,
+                        "majorId": 1,
+                        "year": 2
+                    },
+                    {
+                        "id": 7,
+                        "name": "MJM-Y2",
+                        "size": 20,
+                        "majorId": 2,
+                        "year": 2
+                    },
+                    {
+                        "id": 8,
+                        "name": "EFTH-Y2",
+                        "size": 20,
+                        "majorId": 3,
+                        "year": 2
+                    },
+                    {
+                        "id": 9,
+                        "name": "ESAS-Y2",
+                        "size": 20,
+                        "majorId": 4,
+                        "year": 2
+                    },
+                    {
+                        "id": 10,
+                        "name": "ECE-Y2",
+                        "size": 20,
+                        "majorId": 5,
+                        "year": 2
+                    },
+                    {
+                        "id": 11,
+                        "name": "BCSE-Y4",
+                        "size": 20,
+                        "majorId": 1,
+                        "year": 4
+                    },
+                    {
+                        "id": 12,
+                        "name": "ESAS-Y4",
+                        "size": 15,
+                        "majorId": 4,
+                        "year": 4
+                    },
+                    {
+                        "id": 13,
+                        "name": "ECE-Y4",
+                        "size": 15,
+                        "majorId": 5,
+                        "year": 4
+                    }
+                ],
+                "subjects": [
+                    {
+                        "id": 1,
+                        "name": "Thiết kế hệ thống số với HDL _ HP1 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 2,
+                        "name": "Học máy",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 3,
+                        "name": "Kỹ thuật thông tin nông nghiệp (online)",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 4,
+                        "name": "Kiến trúc trong xây dựng",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 5,
+                        "name": "Tổ chức sản xuất kiểu Nhật (thực hành tại HL)",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 6,
+                        "name": "Vệ sinh và an toàn thực phẩm",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 7,
+                        "name": "Thiết kế hệ thống SoC_HP1 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 8,
+                        "name": "Tính toán song song",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 9,
+                        "name": "An toàn lao động",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 10,
+                        "name": "Các kỹ thuật sinh học phân tử",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 11,
+                        "name": "Phân tích và thiết kế hệ thống",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 12,
+                        "name": "Đồ án chuyên ngành _ HP3",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 13,
+                        "name": "Cơ sở thiết kế máy",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 14,
+                        "name": "Công nghệ tài chính",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 15,
+                        "name": "Đồ án chuyên ngành _ HP1",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 16,
+                        "name": "Quản lý chuỗi cung ứng nông sản",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 17,
+                        "name": "Robot công nghiệp",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 18,
+                        "name": "Dinh dưỡng Nhật Bản",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 19,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP1",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 20,
+                        "name": "Thiết kế hệ thống số với HDL _ HP2 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 21,
+                        "name": "Đồ án 3: Thiết kế nhà bê tông cốt thép",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 22,
+                        "name": "Cảm biến và xử lý tín hiệu",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 23,
+                        "name": "Thiết kế hệ thống SoC_HP2 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 24,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP2",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 25,
+                        "name": "Dao động kỹ thuật",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 26,
+                        "name": "Cơ sở hóa sinh và hóa lý",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 27,
+                        "name": "BIM trong xây dựng",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 28,
+                        "name": "Cơ học môi trường liên tục",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 29,
+                        "name": "Nhập môn cơ điện tử",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 30,
+                        "name": "Thiết kế hệ thống số với HDL _ HP2",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 31,
+                        "name": "Đồ án chuyên ngành _ HP2",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 32,
+                        "name": "Thực nghiệm trong xây dựng",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 33,
+                        "name": "Quản lý trong công nghiệp thực phẩm",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 34,
+                        "name": "Phát triển ứng dụng di động (Online) - 8 tuần cuối học cả thứ 6 và thêm 2 tiết thứ 5",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 35,
+                        "name": "Luật và chính sách nông nghiệp Nhật Bản và Việt Nam (online)",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 36,
+                        "name": "Phát triển ứng dụng di động (Online) - 15 tuần",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 37,
+                        "name": "An ninh thông tin _ HP1",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 38,
+                        "name": "Kết cấu thép",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 39,
+                        "name": "Dung sai và kỹ thuật đo lường",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 40,
+                        "name": "Quản lý nông nghiệp theo vùng miền",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 41,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP3",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 42,
+                        "name": "An ninh thông tin _ HP2",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 43,
+                        "name": "Vẽ kỹ thuật cơ khí II (thực hành tại Hòa Lạc)",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 44,
+                        "name": "Quản lý thực phẩm cơ sở",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 45,
+                        "name": "Học theo dự án",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 46,
+                        "name": "Thực tập định hướng nghề nghiệp",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 47,
+                        "name": "Thiết kế hệ thống số với HDL _ HP1",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 48,
+                        "name": "Công nghệ nhiệt lạnh",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 49,
+                        "name": "Thiết kế hệ thống SoC_HP1",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 50,
+                        "name": "Thiết kế hệ thống SoC_HP2",
+                        "requiredRoomType": 0
+                    },
+                    {
+                        "id": 51,
+                        "name": "Qúa trình và thiết bị trong công nghệ thực phẩm",
+                        "requiredRoomType": 0
+                    }
+                ],
+                "courses": [
+                    {
+                        "id": 1,
+                        "name": "Thiết kế hệ thống số với HDL _ HP1 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 2,
+                        "name": "Học máy",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 3,
+                        "name": "Kỹ thuật thông tin nông nghiệp (online)",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 4,
+                        "name": "Kiến trúc trong xây dựng",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 5,
+                        "name": "Tổ chức sản xuất kiểu Nhật (thực hành tại HL)",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 6,
+                        "name": "Vệ sinh và an toàn thực phẩm",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 7,
+                        "name": "Thiết kế hệ thống SoC_HP1 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 8,
+                        "name": "Tính toán song song",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 9,
+                        "name": "An toàn lao động",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 10,
+                        "name": "Các kỹ thuật sinh học phân tử",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 11,
+                        "name": "Phân tích và thiết kế hệ thống",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 12,
+                        "name": "Đồ án chuyên ngành _ HP3",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 13,
+                        "name": "Cơ sở thiết kế máy",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 14,
+                        "name": "Công nghệ tài chính",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 15,
+                        "name": "Đồ án chuyên ngành _ HP1",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 16,
+                        "name": "Quản lý chuỗi cung ứng nông sản",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 17,
+                        "name": "Robot công nghiệp",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 18,
+                        "name": "Dinh dưỡng Nhật Bản",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 19,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP1",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 20,
+                        "name": "Thiết kế hệ thống số với HDL _ HP2 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 21,
+                        "name": "Đồ án 3: Thiết kế nhà bê tông cốt thép",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 22,
+                        "name": "Cảm biến và xử lý tín hiệu",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 23,
+                        "name": "Thiết kế hệ thống SoC_HP2 (30 tiết lý thuyết trong 8 tuần đầu) - online",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 24,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP2",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 25,
+                        "name": "Dao động kỹ thuật",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 26,
+                        "name": "Cơ sở hóa sinh và hóa lý",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 27,
+                        "name": "BIM trong xây dựng",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 28,
+                        "name": "Cơ học môi trường liên tục",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 29,
+                        "name": "Nhập môn cơ điện tử",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 30,
+                        "name": "Thiết kế hệ thống số với HDL _ HP2",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 31,
+                        "name": "Đồ án chuyên ngành _ HP2",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 32,
+                        "name": "Thực nghiệm trong xây dựng",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 33,
+                        "name": "Quản lý trong công nghiệp thực phẩm",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 34,
+                        "name": "Phát triển ứng dụng di động (Online) - 8 tuần cuối học cả thứ 6 và thêm 2 tiết thứ 5",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 35,
+                        "name": "Luật và chính sách nông nghiệp Nhật Bản và Việt Nam (online)",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 36,
+                        "name": "Phát triển ứng dụng di động (Online) - 15 tuần",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 1
+                    },
+                    {
+                        "id": 37,
+                        "name": "An ninh thông tin _ HP1",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 38,
+                        "name": "Kết cấu thép",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 39,
+                        "name": "Dung sai và kỹ thuật đo lường",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 40,
+                        "name": "Quản lý nông nghiệp theo vùng miền",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 41,
+                        "name": "Học theo dự án khoa học kỹ thuật _ HP3",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 42,
+                        "name": "An ninh thông tin _ HP2",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 43,
+                        "name": "Vẽ kỹ thuật cơ khí II (thực hành tại Hòa Lạc)",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 44,
+                        "name": "Quản lý thực phẩm cơ sở",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 45,
+                        "name": "Học theo dự án",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 46,
+                        "name": "Thực tập định hướng nghề nghiệp",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 3,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 47,
+                        "name": "Thiết kế hệ thống số với HDL _ HP1",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 48,
+                        "name": "Công nghệ nhiệt lạnh",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 49,
+                        "name": "Thiết kế hệ thống SoC_HP1",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 50,
+                        "name": "Thiết kế hệ thống SoC_HP2",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    },
+                    {
+                        "id": 51,
+                        "name": "Qúa trình và thiết bị trong công nghệ thực phẩm",
+                        "requiredRoomType": 0,
+                        "courseType": 0,
+                        "sessionsPerWeek": 1,
+                        "sessionsPerSession": 2,
+                        "deliveryMode": 0
+                    }
+                ],
+                "timeSlots": [
+                    {
+                        "id": 1,
+                        "dayOfWeek": 1,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 2,
+                        "dayOfWeek": 1,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 3,
+                        "dayOfWeek": 1,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 4,
+                        "dayOfWeek": 1,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 5,
+                        "dayOfWeek": 1,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 7,
+                        "dayOfWeek": 1,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 8,
+                        "dayOfWeek": 1,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 9,
+                        "dayOfWeek": 1,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 10,
+                        "dayOfWeek": 1,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 11,
+                        "dayOfWeek": 1,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    },
+                    {
+                        "id": 12,
+                        "dayOfWeek": 1,
+                        "startTime": "18:00:00",
+                        "endTime": "18:50:00"
+                    },
+                    {
+                        "id": 13,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 14,
+                        "dayOfWeek": 2,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 15,
+                        "dayOfWeek": 2,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 16,
+                        "dayOfWeek": 2,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 17,
+                        "dayOfWeek": 2,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 19,
+                        "dayOfWeek": 2,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 20,
+                        "dayOfWeek": 2,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 21,
+                        "dayOfWeek": 2,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 22,
+                        "dayOfWeek": 2,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 23,
+                        "dayOfWeek": 2,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    },
+                    {
+                        "id": 24,
+                        "dayOfWeek": 2,
+                        "startTime": "18:00:00",
+                        "endTime": "18:50:00"
+                    },
+                    {
+                        "id": 25,
+                        "dayOfWeek": 3,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 26,
+                        "dayOfWeek": 3,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 27,
+                        "dayOfWeek": 3,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 28,
+                        "dayOfWeek": 3,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 29,
+                        "dayOfWeek": 3,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 31,
+                        "dayOfWeek": 3,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 32,
+                        "dayOfWeek": 3,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 33,
+                        "dayOfWeek": 3,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 34,
+                        "dayOfWeek": 3,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 35,
+                        "dayOfWeek": 3,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    },
+                    {
+                        "id": 36,
+                        "dayOfWeek": 3,
+                        "startTime": "18:00:00",
+                        "endTime": "18:50:00"
+                    },
+                    {
+                        "id": 37,
+                        "dayOfWeek": 4,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 38,
+                        "dayOfWeek": 4,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 39,
+                        "dayOfWeek": 4,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 40,
+                        "dayOfWeek": 4,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 41,
+                        "dayOfWeek": 4,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 43,
+                        "dayOfWeek": 4,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 44,
+                        "dayOfWeek": 4,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 45,
+                        "dayOfWeek": 4,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 46,
+                        "dayOfWeek": 4,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 47,
+                        "dayOfWeek": 4,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    },
+                    {
+                        "id": 48,
+                        "dayOfWeek": 4,
+                        "startTime": "18:00:00",
+                        "endTime": "18:50:00"
+                    },
+                    {
+                        "id": 49,
+                        "dayOfWeek": 4,
+                        "startTime": "19:00:00",
+                        "endTime": "19:50:00"
+                    },
+                    {
+                        "id": 50,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 51,
+                        "dayOfWeek": 5,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 52,
+                        "dayOfWeek": 5,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 53,
+                        "dayOfWeek": 5,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 54,
+                        "dayOfWeek": 5,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 56,
+                        "dayOfWeek": 5,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 57,
+                        "dayOfWeek": 5,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 58,
+                        "dayOfWeek": 5,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 59,
+                        "dayOfWeek": 5,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 60,
+                        "dayOfWeek": 5,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    },
+                    {
+                        "id": 61,
+                        "dayOfWeek": 5,
+                        "startTime": "18:00:00",
+                        "endTime": "18:50:00"
+                    },
+                    {
+                        "id": 62,
+                        "dayOfWeek": 6,
+                        "startTime": "07:00:00",
+                        "endTime": "07:50:00"
+                    },
+                    {
+                        "id": 63,
+                        "dayOfWeek": 6,
+                        "startTime": "08:00:00",
+                        "endTime": "08:50:00"
+                    },
+                    {
+                        "id": 64,
+                        "dayOfWeek": 6,
+                        "startTime": "09:00:00",
+                        "endTime": "09:50:00"
+                    },
+                    {
+                        "id": 65,
+                        "dayOfWeek": 6,
+                        "startTime": "10:00:00",
+                        "endTime": "10:50:00"
+                    },
+                    {
+                        "id": 66,
+                        "dayOfWeek": 6,
+                        "startTime": "11:00:00",
+                        "endTime": "11:50:00"
+                    },
+                    {
+                        "id": 68,
+                        "dayOfWeek": 6,
+                        "startTime": "13:00:00",
+                        "endTime": "13:50:00"
+                    },
+                    {
+                        "id": 69,
+                        "dayOfWeek": 6,
+                        "startTime": "14:00:00",
+                        "endTime": "14:50:00"
+                    },
+                    {
+                        "id": 70,
+                        "dayOfWeek": 6,
+                        "startTime": "15:00:00",
+                        "endTime": "15:50:00"
+                    },
+                    {
+                        "id": 71,
+                        "dayOfWeek": 6,
+                        "startTime": "16:00:00",
+                        "endTime": "16:50:00"
+                    },
+                    {
+                        "id": 72,
+                        "dayOfWeek": 6,
+                        "startTime": "17:00:00",
+                        "endTime": "17:50:00"
+                    }
+                ],
+                "lessons": [
+                    {
+                        "id": 1,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 1,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 53,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 10,
+                        "timeSlotId": 41,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 2,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 2,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 54,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 10,
+                        "timeSlotId": 1,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 3,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 3,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 55,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 7,
+                        "timeSlotId": 25,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 4,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 4,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 56,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 8,
+                        "timeSlotId": 1,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 5,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 5,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 57,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 1,
+                        "timeSlotId": 2,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 6,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 6,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 58,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 6,
+                        "timeSlotId": 17,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 7,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 7,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 59,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 3,
+                        "timeSlotId": 37,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 8,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 8,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 60,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": null,
+                        "timeSlotId": 46,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 9,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 9,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 61,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 3,
+                        "timeSlotId": 17,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 10,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 10,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 62,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 7,
+                        "timeSlotId": 14,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 11,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 11,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 63,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 3,
+                        "timeSlotId": 13,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 12,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 12,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 64,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 3,
+                        "timeSlotId": 3,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 13,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 13,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 65,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 15,
+                        "timeSlotId": 15,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 14,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 14,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 66,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 13,
+                        "timeSlotId": 20,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 15,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 15,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 67,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 5,
+                        "timeSlotId": 22,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 16,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 16,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 68,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 4,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 17,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 17,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 69,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 16,
+                        "timeSlotId": 5,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 18,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 18,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 70,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 1,
+                        "timeSlotId": 9,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 19,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 19,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 71,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 5,
+                        "timeSlotId": 8,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 20,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 20,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 72,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 18,
+                        "timeSlotId": 27,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 21,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 21,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 73,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 1,
+                        "timeSlotId": 27,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 22,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 22,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 74,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 12,
+                        "timeSlotId": 47,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 23,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 23,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 75,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 2,
+                        "timeSlotId": 31,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 24,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 24,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 76,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 5,
+                        "timeSlotId": 11,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 25,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 25,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 77,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 1,
+                        "timeSlotId": 19,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 26,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 26,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 78,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 8,
+                        "timeSlotId": 32,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 27,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 27,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 79,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 45,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 28,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 28,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 80,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 14,
+                        "timeSlotId": 14,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 29,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 29,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 81,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 17,
+                        "timeSlotId": 38,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 30,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 30,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 82,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 11,
+                        "timeSlotId": 69,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 31,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 31,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 83,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 12,
+                        "timeSlotId": 36,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 32,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 32,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 84,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 41,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 33,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 33,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 85,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 17,
+                        "timeSlotId": 43,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 34,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 34,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 86,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 10,
+                        "timeSlotId": 48,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 35,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 35,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 87,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 5,
+                        "timeSlotId": 59,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 36,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 35,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 88,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 12,
+                        "timeSlotId": 51,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 37,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 36,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 89,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 9,
+                        "timeSlotId": 52,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 38,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 37,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 90,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": null,
+                        "timeSlotId": 50,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 39,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 38,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 91,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 10,
+                        "timeSlotId": 4,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 40,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 39,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 92,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 51,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 41,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 40,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 93,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 8,
+                        "timeSlotId": 40,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 42,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 41,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 94,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 14,
+                        "timeSlotId": 57,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 43,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 42,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 95,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 9,
+                        "timeSlotId": 54,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 44,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 43,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 96,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 15,
+                        "timeSlotId": 56,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 45,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 44,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 97,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 16,
+                        "timeSlotId": 58,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 46,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 45,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 98,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 4,
+                        "timeSlotId": 7,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 47,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 46,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 99,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 7,
+                        "timeSlotId": 56,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 48,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 47,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 100,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 1,
+                        "timeSlotId": 62,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 49,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 48,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 101,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 14,
+                        "timeSlotId": 63,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 50,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 49,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 102,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 9,
+                        "timeSlotId": 65,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 51,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 50,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 103,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 8,
+                        "timeSlotId": 16,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 52,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 51,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 104,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 8,
+                        "timeSlotId": 66,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 53,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 3,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 1,
+                        "courseSectionId": 105,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": null,
+                        "timeSlotId": 1,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 54,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 9,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 106,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 1,
+                        "timeSlotId": 14,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 55,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 26,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 107,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 16,
+                        "timeSlotId": 25,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 56,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 28,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 108,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 38,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 57,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 4,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 109,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 9,
+                        "timeSlotId": 3,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 58,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 16,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 110,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 18,
+                        "timeSlotId": 2,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 59,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 21,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 111,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 6,
+                        "timeSlotId": 14,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 60,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 27,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 112,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 2,
+                        "timeSlotId": 32,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 61,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 32,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 113,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 2,
+                        "roomId": 4,
+                        "timeSlotId": 62,
+                        "isAutoPlaceFailed": false
+                    },
+                    {
+                        "id": 62,
+                        "teacherId": 0,
+                        "studentGroupId": 0,
+                        "subjectId": 46,
+                        "requiredRoomType": 0,
+                        "deliveryMode": 0,
+                        "courseSectionId": 114,
+                        "sessionIndex": 1,
+                        "isPinned": false,
+                        "sessionDuration": 3,
+                        "roomId": 3,
+                        "timeSlotId": 38,
+                        "isAutoPlaceFailed": false
+                    }
+                ],
+                "courseSections": [
+                    {
+                        "id": 53,
+                        "courseId": 1,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 65,
+                                "courseSectionId": 53,
+                                "teacherId": 1,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 54,
+                        "courseId": 2,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 66,
+                                "courseSectionId": 54,
+                                "teacherId": 2,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 55,
+                        "courseId": 3,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 67,
+                                "courseSectionId": 55,
+                                "teacherId": 3,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 56,
+                        "courseId": 4,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 68,
+                                "courseSectionId": 56,
+                                "teacherId": 4,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 57,
+                        "courseId": 5,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 69,
+                                "courseSectionId": 57,
+                                "teacherId": 5,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 70,
+                                "courseSectionId": 57,
+                                "teacherId": 6,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 58,
+                        "courseId": 6,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 71,
+                                "courseSectionId": 58,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 59,
+                        "courseId": 7,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 72,
+                                "courseSectionId": 59,
+                                "teacherId": 1,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 60,
+                        "courseId": 8,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 73,
+                                "courseSectionId": 60,
+                                "teacherId": 8,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 61,
+                        "courseId": 9,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 74,
+                                "courseSectionId": 61,
+                                "teacherId": 9,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 62,
+                        "courseId": 10,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 75,
+                                "courseSectionId": 62,
+                                "teacherId": 10,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 76,
+                                "courseSectionId": 62,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 63,
+                        "courseId": 11,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 77,
+                                "courseSectionId": 63,
+                                "teacherId": 11,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 64,
+                        "courseId": 12,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 78,
+                                "courseSectionId": 64,
+                                "teacherId": 8,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 79,
+                                "courseSectionId": 64,
+                                "teacherId": 2,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 65,
+                        "courseId": 13,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 80,
+                                "courseSectionId": 65,
+                                "teacherId": 12,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 66,
+                        "courseId": 14,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 81,
+                                "courseSectionId": 66,
+                                "teacherId": 13,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 67,
+                        "courseId": 15,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 82,
+                                "courseSectionId": 67,
+                                "teacherId": 14,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 83,
+                                "courseSectionId": 67,
+                                "teacherId": 15,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 68,
+                        "courseId": 16,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 84,
+                                "courseSectionId": 68,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 69,
+                        "courseId": 17,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 85,
+                                "courseSectionId": 69,
+                                "teacherId": 6,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 70,
+                        "courseId": 18,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 86,
+                                "courseSectionId": 70,
+                                "teacherId": 16,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 71,
+                        "courseId": 19,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 87,
+                                "courseSectionId": 71,
+                                "teacherId": 17,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 72,
+                        "courseId": 20,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 88,
+                                "courseSectionId": 72,
+                                "teacherId": 18,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 73,
+                        "courseId": 21,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 89,
+                                "courseSectionId": 73,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 74,
+                        "courseId": 22,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 90,
+                                "courseSectionId": 74,
+                                "teacherId": 20,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 75,
+                        "courseId": 23,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 91,
+                                "courseSectionId": 75,
+                                "teacherId": 18,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 76,
+                        "courseId": 24,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 92,
+                                "courseSectionId": 76,
+                                "teacherId": 21,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 77,
+                        "courseId": 25,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 93,
+                                "courseSectionId": 77,
+                                "teacherId": 6,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 78,
+                        "courseId": 26,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 94,
+                                "courseSectionId": 78,
+                                "teacherId": 22,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 95,
+                                "courseSectionId": 78,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 79,
+                        "courseId": 27,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 96,
+                                "courseSectionId": 79,
+                                "teacherId": 23,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 80,
+                        "courseId": 28,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 97,
+                                "courseSectionId": 80,
+                                "teacherId": 24,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 81,
+                        "courseId": 29,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 98,
+                                "courseSectionId": 81,
+                                "teacherId": 25,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 82,
+                        "courseId": 30,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 99,
+                                "courseSectionId": 82,
+                                "teacherId": 26,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 83,
+                        "courseId": 31,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 100,
+                                "courseSectionId": 83,
+                                "teacherId": 27,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 101,
+                                "courseSectionId": 83,
+                                "teacherId": 28,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 84,
+                        "courseId": 32,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 102,
+                                "courseSectionId": 84,
+                                "teacherId": 29,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 103,
+                                "courseSectionId": 84,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 85,
+                        "courseId": 33,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 104,
+                                "courseSectionId": 85,
+                                "teacherId": 30,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 105,
+                                "courseSectionId": 85,
+                                "teacherId": 31,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 86,
+                        "courseId": 34,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 106,
+                                "courseSectionId": 86,
+                                "teacherId": 32,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 87,
+                        "courseId": 35,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 107,
+                                "courseSectionId": 87,
+                                "teacherId": 33,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 88,
+                        "courseId": 35,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 108,
+                                "courseSectionId": 88,
+                                "teacherId": 34,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 89,
+                        "courseId": 36,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 109,
+                                "courseSectionId": 89,
+                                "teacherId": 32,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 90,
+                        "courseId": 37,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 110,
+                                "courseSectionId": 90,
+                                "teacherId": 35,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 111,
+                                "courseSectionId": 90,
+                                "teacherId": 36,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 91,
+                        "courseId": 38,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 112,
+                                "courseSectionId": 91,
+                                "teacherId": 9,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 92,
+                        "courseId": 39,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 113,
+                                "courseSectionId": 92,
+                                "teacherId": 37,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 93,
+                        "courseId": 40,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 114,
+                                "courseSectionId": 93,
+                                "teacherId": 38,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 94,
+                        "courseId": 41,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 115,
+                                "courseSectionId": 94,
+                                "teacherId": 21,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 95,
+                        "courseId": 42,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 116,
+                                "courseSectionId": 95,
+                                "teacherId": 35,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 117,
+                                "courseSectionId": 95,
+                                "teacherId": 36,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 96,
+                        "courseId": 43,
+                        "studentGroupIds": [
+                            2
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 118,
+                                "courseSectionId": 96,
+                                "teacherId": 5,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 97,
+                        "courseId": 44,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 119,
+                                "courseSectionId": 97,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 120,
+                                "courseSectionId": 97,
+                                "teacherId": 31,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 98,
+                        "courseId": 45,
+                        "studentGroupIds": [
+                            4
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 121,
+                                "courseSectionId": 98,
+                                "teacherId": 38,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 99,
+                        "courseId": 46,
+                        "studentGroupIds": [
+                            5
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 122,
+                                "courseSectionId": 99,
+                                "teacherId": 29,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 123,
+                                "courseSectionId": 99,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 100,
+                        "courseId": 47,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 124,
+                                "courseSectionId": 100,
+                                "teacherId": 39,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 101,
+                        "courseId": 48,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 125,
+                                "courseSectionId": 101,
+                                "teacherId": 40,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 102,
+                        "courseId": 49,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 126,
+                                "courseSectionId": 102,
+                                "teacherId": 39,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 103,
+                        "courseId": 50,
+                        "studentGroupIds": [
+                            1
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 127,
+                                "courseSectionId": 103,
+                                "teacherId": 26,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 104,
+                        "courseId": 51,
+                        "studentGroupIds": [
+                            3
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 128,
+                                "courseSectionId": 104,
+                                "teacherId": 40,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 105,
+                        "courseId": 3,
+                        "studentGroupIds": [
+                            9
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 129,
+                                "courseSectionId": 105,
+                                "teacherId": 3,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 106,
+                        "courseId": 9,
+                        "studentGroupIds": [
+                            10
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 130,
+                                "courseSectionId": 106,
+                                "teacherId": 9,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 107,
+                        "courseId": 26,
+                        "studentGroupIds": [
+                            8
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 131,
+                                "courseSectionId": 107,
+                                "teacherId": 22,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 132,
+                                "courseSectionId": 107,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 108,
+                        "courseId": 28,
+                        "studentGroupIds": [
+                            10
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 133,
+                                "courseSectionId": 108,
+                                "teacherId": 24,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 109,
+                        "courseId": 4,
+                        "studentGroupIds": [
+                            13
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 134,
+                                "courseSectionId": 109,
+                                "teacherId": 4,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 110,
+                        "courseId": 16,
+                        "studentGroupIds": [
+                            12
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 135,
+                                "courseSectionId": 110,
+                                "teacherId": 7,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 111,
+                        "courseId": 21,
+                        "studentGroupIds": [
+                            13
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 136,
+                                "courseSectionId": 111,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 112,
+                        "courseId": 27,
+                        "studentGroupIds": [
+                            13
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 137,
+                                "courseSectionId": 112,
+                                "teacherId": 23,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 113,
+                        "courseId": 32,
+                        "studentGroupIds": [
+                            13
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 138,
+                                "courseSectionId": 113,
+                                "teacherId": 29,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 139,
+                                "courseSectionId": 113,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 114,
+                        "courseId": 46,
+                        "studentGroupIds": [
+                            13
+                        ],
+                        "sectionTeachers": [
+                            {
+                                "id": 140,
+                                "courseSectionId": 114,
+                                "teacherId": 29,
+                                "sessionIndex": null,
+                                "role": 0
+                            },
+                            {
+                                "id": 141,
+                                "courseSectionId": 114,
+                                "teacherId": 19,
+                                "sessionIndex": null,
+                                "role": 0
+                            }
+                        ]
+                    }
+                ],
+                "availableWindows": [
+                    {
+                        "id": 1,
+                        "entityType": 0,
+                        "entityId": 2,
+                        "dayOfWeek": 1,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 2,
+                        "entityType": 0,
+                        "entityId": 2,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 3,
+                        "entityType": 0,
+                        "entityId": 32,
+                        "dayOfWeek": 4,
+                        "startTime": "16:00:00",
+                        "endTime": "18:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 4,
+                        "entityType": 0,
+                        "entityId": 32,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 5,
+                        "entityType": 0,
+                        "entityId": 3,
+                        "dayOfWeek": 1,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 6,
+                        "entityType": 0,
+                        "entityId": 3,
+                        "dayOfWeek": 3,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 7,
+                        "entityType": 0,
+                        "entityId": 22,
+                        "dayOfWeek": 3,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 8,
+                        "entityType": 0,
+                        "entityId": 10,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 9,
+                        "entityType": 0,
+                        "entityId": 5,
+                        "dayOfWeek": 1,
+                        "startTime": "08:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 10,
+                        "entityType": 0,
+                        "entityId": 5,
+                        "dayOfWeek": 5,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 11,
+                        "entityType": 0,
+                        "entityId": 31,
+                        "dayOfWeek": 1,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 12,
+                        "entityType": 0,
+                        "entityId": 31,
+                        "dayOfWeek": 2,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 13,
+                        "entityType": 0,
+                        "entityId": 31,
+                        "dayOfWeek": 4,
+                        "startTime": "12:00:00",
+                        "endTime": "16:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 14,
+                        "entityType": 0,
+                        "entityId": 31,
+                        "dayOfWeek": 5,
+                        "startTime": "13:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 15,
+                        "entityType": 0,
+                        "entityId": 11,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "08:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 16,
+                        "entityType": 0,
+                        "entityId": 30,
+                        "dayOfWeek": 2,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 17,
+                        "entityType": 0,
+                        "entityId": 30,
+                        "dayOfWeek": 4,
+                        "startTime": "12:00:00",
+                        "endTime": "16:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 18,
+                        "entityType": 0,
+                        "entityId": 33,
+                        "dayOfWeek": 1,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 19,
+                        "entityType": 0,
+                        "entityId": 33,
+                        "dayOfWeek": 3,
+                        "startTime": "14:00:00",
+                        "endTime": "16:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 20,
+                        "entityType": 0,
+                        "entityId": 33,
+                        "dayOfWeek": 4,
+                        "startTime": "16:00:00",
+                        "endTime": "18:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 21,
+                        "entityType": 0,
+                        "entityId": 33,
+                        "dayOfWeek": 5,
+                        "startTime": "14:00:00",
+                        "endTime": "16:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 22,
+                        "entityType": 0,
+                        "entityId": 34,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "08:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 23,
+                        "entityType": 0,
+                        "entityId": 13,
+                        "dayOfWeek": 2,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 24,
+                        "entityType": 0,
+                        "entityId": 4,
+                        "dayOfWeek": 1,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 25,
+                        "entityType": 0,
+                        "entityId": 36,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 26,
+                        "entityType": 0,
+                        "entityId": 40,
+                        "dayOfWeek": 6,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 27,
+                        "entityType": 0,
+                        "entityId": 35,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 28,
+                        "entityType": 0,
+                        "entityId": 29,
+                        "dayOfWeek": 2,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 29,
+                        "entityType": 0,
+                        "entityId": 29,
+                        "dayOfWeek": 4,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 30,
+                        "entityType": 0,
+                        "entityId": 29,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 31,
+                        "entityType": 0,
+                        "entityId": 29,
+                        "dayOfWeek": 6,
+                        "startTime": "07:00:00",
+                        "endTime": "18:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 32,
+                        "entityType": 0,
+                        "entityId": 6,
+                        "dayOfWeek": 1,
+                        "startTime": "08:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 33,
+                        "entityType": 0,
+                        "entityId": 6,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 34,
+                        "entityType": 0,
+                        "entityId": 6,
+                        "dayOfWeek": 3,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 35,
+                        "entityType": 0,
+                        "entityId": 6,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 36,
+                        "entityType": 0,
+                        "entityId": 38,
+                        "dayOfWeek": 1,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 37,
+                        "entityType": 0,
+                        "entityId": 38,
+                        "dayOfWeek": 4,
+                        "startTime": "08:00:00",
+                        "endTime": "10:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 38,
+                        "entityType": 0,
+                        "entityId": 38,
+                        "dayOfWeek": 5,
+                        "startTime": "09:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 39,
+                        "entityType": 0,
+                        "entityId": 23,
+                        "dayOfWeek": 3,
+                        "startTime": "13:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 40,
+                        "entityType": 0,
+                        "entityId": 24,
+                        "dayOfWeek": 4,
+                        "startTime": "07:00:00",
+                        "endTime": "08:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 41,
+                        "entityType": 0,
+                        "entityId": 1,
+                        "dayOfWeek": 1,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 42,
+                        "entityType": 0,
+                        "entityId": 25,
+                        "dayOfWeek": 4,
+                        "startTime": "08:00:00",
+                        "endTime": "10:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 43,
+                        "entityType": 0,
+                        "entityId": 18,
+                        "dayOfWeek": 3,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 44,
+                        "entityType": 0,
+                        "entityId": 12,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 45,
+                        "entityType": 0,
+                        "entityId": 37,
+                        "dayOfWeek": 5,
+                        "startTime": "08:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 46,
+                        "entityType": 0,
+                        "entityId": 9,
+                        "dayOfWeek": 1,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 47,
+                        "entityType": 0,
+                        "entityId": 9,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 48,
+                        "entityType": 0,
+                        "entityId": 9,
+                        "dayOfWeek": 5,
+                        "startTime": "07:00:00",
+                        "endTime": "09:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 49,
+                        "entityType": 0,
+                        "entityId": 7,
+                        "dayOfWeek": 1,
+                        "startTime": "08:00:00",
+                        "endTime": "10:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 50,
+                        "entityType": 0,
+                        "entityId": 7,
+                        "dayOfWeek": 2,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 51,
+                        "entityType": 0,
+                        "entityId": 7,
+                        "dayOfWeek": 3,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 52,
+                        "entityType": 0,
+                        "entityId": 7,
+                        "dayOfWeek": 5,
+                        "startTime": "13:00:00",
+                        "endTime": "15:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 53,
+                        "entityType": 0,
+                        "entityId": 17,
+                        "dayOfWeek": 1,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 54,
+                        "entityType": 0,
+                        "entityId": 21,
+                        "dayOfWeek": 3,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 55,
+                        "entityType": 0,
+                        "entityId": 21,
+                        "dayOfWeek": 5,
+                        "startTime": "14:00:00",
+                        "endTime": "16:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 56,
+                        "entityType": 0,
+                        "entityId": 26,
+                        "dayOfWeek": 3,
+                        "startTime": "12:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 57,
+                        "entityType": 0,
+                        "entityId": 26,
+                        "dayOfWeek": 6,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 58,
+                        "entityType": 0,
+                        "entityId": 39,
+                        "dayOfWeek": 3,
+                        "startTime": "08:00:00",
+                        "endTime": "10:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 59,
+                        "entityType": 0,
+                        "entityId": 39,
+                        "dayOfWeek": 6,
+                        "startTime": "07:00:00",
+                        "endTime": "14:50:00",
+                        "isLocked": false
+                    },
+                    {
+                        "id": 60,
+                        "entityType": 0,
+                        "entityId": 41,
+                        "dayOfWeek": 6,
+                        "startTime": "07:30:00",
+                        "endTime": "17:00:00",
+                        "isLocked": false
+                    }
+                ],
+                "lecturerConstraints": [],
+                "conflicts": [
+                    {
+                        "id": 1,
+                        "scheduleId": 0,
+                        "conflictType": 0,
+                        "level": 0,
+                        "description": "Giảng viên mời 'TS.Vũ Hoàng Gia (học từ tuần thứ 9, 30 tiết thực hành)' chưa được xếp lịch buổi nào (Id=41).",
+                        "affectedEntityIds": [
+                            41
+                        ]
+                    },
+                    {
+                        "id": 2,
+                        "scheduleId": 0,
+                        "conflictType": 7,
+                        "level": 0,
+                        "description": "Chưa gán phòng: Môn 'Tính toán song song' tại Thursday 04:00 chưa có phòng học. | GV: TS. Lê Kim Quy | Nhóm: BCSE-Y3",
+                        "affectedEntityIds": [
+                            8
+                        ]
+                    },
+                    {
+                        "id": 3,
+                        "scheduleId": 0,
+                        "conflictType": 7,
+                        "level": 0,
+                        "description": "Chưa gán phòng: Môn 'An ninh thông tin _ HP1' tại Friday 07:00 chưa có phòng học. | GV: TS. Nguyễn Mạnh Thắng, TS. Mai Chí Thọ | Nhóm: BCSE-Y3",
+                        "affectedEntityIds": [
+                            38
+                        ]
+                    },
+                    {
+                        "id": 4,
+                        "scheduleId": 0,
+                        "conflictType": 7,
+                        "level": 0,
+                        "description": "Chưa gán phòng: Môn 'Kỹ thuật thông tin nông nghiệp (online)' tại Monday 07:00 chưa có phòng học. | GV: GS.TS. Koichi Nomura | Nhóm: ESAS-Y2",
+                        "affectedEntityIds": [
+                            53
+                        ]
+                    }
+                ],
+                "hardScore": -70000,
+                "softScore": -10389
+            }
+        },
+        "error": null
+    },
+    "errorCode": null,
+    "statusCode": 200
+}

@@ -648,7 +648,9 @@ select:focus-visible {
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
+  /* overflow visible so spanning cards aren't clipped */
   overflow: visible;
+  position: relative;
 }
 .schedv2-grid-row {
   display: contents;
@@ -659,24 +661,50 @@ select:focus-visible {
   padding: 6px;
   font-size: 10px;
   color: #334155;
+  /* cells fill their grid area */
+  overflow: hidden;
 }
 .schedv2-grid-cell.time {
   background: #f8fafc;
   font-weight: 700;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
 }
+.schedv2-grid-cell.time strong { font-size: 10px; }
+.schedv2-grid-cell.time span   { font-size: 9px; color: #94a3b8; }
 .schedv2-grid-cell.day {
   background: #f1f5f9;
   text-align: center;
   font-weight: 700;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .schedv2-grid-cell.body {
   background: #fff;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  overflow: visible;
+  gap: 4px;
   position: relative;
+}
+/* The host cell for a spanning lesson — stretches the card */
+.schedv2-grid-cell.body.lesson-cell-host {
+  padding: 3px;
+  overflow: visible;
+}
+.schedv2-grid-cell.body.lesson-cell-host > .lesson-card {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 .schedv2-grid-cell.sat {
   background: #fff7ed;
@@ -691,6 +719,8 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #d1d5db;
+  grid-column: 1 / 8;
 }
 /* Grid lesson cards now use .lesson-card.grid (see drag-drop section) */
 .lesson-head {
@@ -2543,8 +2573,53 @@ select:focus-visible {
   gap: 4px;
 }
 
-/* Grid cell: color the corner indicator by year when filtered */
-.lesson-card.grid.y2-card { box-shadow: inset 3px 0 0 #1d4ed8; }
-.lesson-card.grid.y3-card { box-shadow: inset 3px 0 0 #6d28d9; }
-.lesson-card.grid.y4-card { box-shadow: inset 3px 0 0 #0f766e; }
+/* ─── Year badges (on card) ─── */
+.lesson-year {
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+.lesson-year.y2 { background: #dbeafe; color: #1d4ed8; }
+.lesson-year.y3 { background: #ede9fe; color: #6d28d9; }
+.lesson-year.y4 { background: #ccfbf1; color: #0f766e; }
 
+/* Year filter active states */
+.schedv2-filter.year2.active { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+.schedv2-filter.year3.active { background: #6d28d9; border-color: #6d28d9; color: #fff; }
+.schedv2-filter.year4.active { background: #0f766e; border-color: #0f766e; color: #fff; }
+
+/* Year legend dots */
+.legend-dot.year2 { background: #1d4ed8; }
+.legend-dot.year3 { background: #6d28d9; }
+.legend-dot.year4 { background: #0f766e; }
+
+/* ─── Absolute-positioned lesson layout (Google Calendar style) ─── */
+/* Day host: transparent overlay spanning all period rows for one day */
+.schedv2-day-host {
+  pointer-events: none;     /* let drop cells beneath handle events */
+  overflow: visible;
+}
+
+/* Individual lesson card placed absolutely inside the day host */
+.schedv2-lesson-abs {
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+.schedv2-lesson-abs:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  z-index: 10 !important;
+}
+
+/* When lesson card is inside the absolute wrapper, fill it fully */
+.schedv2-lesson-abs .lesson-card {
+  height: 100%;
+  min-height: unset;
+  margin: 0;
+  border-radius: 5px;
+  overflow: hidden;
+}
