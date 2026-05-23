@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NAV_ITEMS } from "./constants/accounts";
-import { logout as apiLogout } from "./services/authService";
+import { logout as apiLogout, refresh as apiRefresh } from "./services/authService";
 import Header from "./presentation/UI/Header";
 import Footer from "./presentation/UI/Footer";
 import LoginScreen from "./presentation/UI/LoginScreen";
@@ -12,6 +12,21 @@ import backgroundPattern from "../assets/images/background.png";
 
 export default function App() {
   const [user, setUser] = useState(null);
+
+  // Auto refresh token every 29 minutes (1740000 ms)
+  useEffect(() => {
+    if (!user) return;
+    const intervalId = setInterval(async () => {
+      try {
+        await apiRefresh();
+        console.log("Token refreshed automatically.");
+      } catch (err) {
+        console.error("Auto refresh failed, logging out:", err);
+        handleLogout();
+      }
+    }, 1740000);
+    return () => clearInterval(intervalId);
+  }, [user]);
   const [activePage, setActivePage] = useState("Scheduling");
   const [language, setLanguage] = useState("Vietnamese");
 

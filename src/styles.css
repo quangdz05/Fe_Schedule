@@ -556,6 +556,9 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
 }
 .panel-header {
   display: flex;
@@ -627,6 +630,8 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  position: relative;
+  z-index: 10;
 }
 .schedv2-grid-head {
   padding: 10px 12px;
@@ -638,7 +643,7 @@ select:focus-visible {
   background: #f8fafc;
 }
 .schedv2-grid-wrap {
-  overflow: auto;
+  overflow: visible;
   padding: 8px;
 }
 .schedv2-grid-table {
@@ -704,7 +709,7 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: hidden;
+  overflow: visible;
 }
 .schedv2-grid-cell.sat {
   background: #fff7ed;
@@ -885,6 +890,7 @@ select:focus-visible {
   line-height: 1;
   opacity: 0;
   transition: opacity .15s;
+  z-index: 10;
 }
 .lesson-card:hover .lesson-remove { opacity: 1; }
 .lesson-card .lesson-remove:hover { color: #ef4444; }
@@ -895,6 +901,105 @@ select:focus-visible {
   border-radius: 3px;
   background: #f1f5f9;
   color: #475569;
+}
+
+/* ─── Inner wrapper to encapsulate content & prevent overflow ─── */
+.lesson-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  gap: 3px;
+}
+
+/* Ensure single-line clean truncation for grid cards */
+.lesson-card.grid strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 2px 0 1px;
+}
+
+.lesson-card.grid .lesson-teacher {
+  display: block;
+  font-size: 9px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-card.grid .lesson-head {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.lesson-card.grid .lesson-head span {
+  flex-shrink: 0;
+  font-size: 8px;
+  padding: 1px 4px;
+}
+
+.lesson-card.grid .lesson-meta {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  margin-top: auto; /* Push metadata to bottom of card */
+}
+
+.lesson-card.grid .lesson-meta span {
+  flex-shrink: 0;
+  font-size: 8px;
+  padding: 1px 3px;
+}
+
+/* ─── Overlap Density Adaptations (Google Calendar style) ─── */
+
+/* 2 overlaps: Standard ellipsis */
+.lesson-card.cols-2 strong {
+  white-space: nowrap;
+}
+.lesson-card.cols-2 .lesson-teacher {
+  white-space: nowrap;
+}
+
+/* 3 overlaps: Hide teacher names & capacity badge inside the cell to prevent wrapping */
+.lesson-card.cols-3 .lesson-teacher {
+  display: none !important;
+}
+.lesson-card.cols-3 .lesson-meta .meta-cap {
+  display: none !important;
+}
+
+/* 4 or more overlaps: extreme density. Hide teacher, metadata, and non-critical badges */
+.lesson-card.cols-4 .lesson-teacher,
+.lesson-card.cols-5 .lesson-teacher,
+.lesson-card.cols-6 .lesson-teacher {
+  display: none !important;
+}
+.lesson-card.cols-4 .lesson-meta,
+.lesson-card.cols-5 .lesson-meta,
+.lesson-card.cols-6 .lesson-meta {
+  display: none !important;
+}
+.lesson-card.cols-4 .lesson-head .lesson-year,
+.lesson-card.cols-4 .lesson-head .lesson-shared-badge,
+.lesson-card.cols-5 .lesson-head .lesson-year,
+.lesson-card.cols-5 .lesson-head .lesson-shared-badge,
+.lesson-card.cols-6 .lesson-head .lesson-year,
+.lesson-card.cols-6 .lesson-head .lesson-shared-badge {
+  display: none !important;
 }
 
 /* ─── Grid Solved Badge ─── */
@@ -1846,6 +1951,96 @@ select:focus-visible {
   margin-top: 2px;
 }
 
+/* --- Tooltip API detail enhancements --- */
+.tt-divider {
+  border: 0;
+  border-top: 1px solid #334155;
+  margin: 12px 0 10px;
+}
+.tt-loading {
+  font-size: 11px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+}
+.tt-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+.tt-api-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+}
+.tt-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tt-conflicts-section {
+  margin-top: 8px;
+  border-top: 1px dashed #334155;
+  padding-top: 8px;
+}
+.tt-conflicts-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.tt-conflicts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+.tt-conflict-item {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+  padding: 4px 6px;
+  border-radius: 4px;
+  line-height: 1.3;
+}
+.tt-conflict-item.hard {
+  background: rgba(220, 38, 38, 0.15);
+  border-left: 2px solid #ef4444;
+  color: #fca5a5;
+}
+.tt-conflict-item.warning {
+  background: rgba(249, 115, 22, 0.15);
+  border-left: 2px solid #f97316;
+  color: #fed7aa;
+}
+.tt-conflict-item.soft {
+  background: rgba(59, 130, 246, 0.15);
+  border-left: 2px solid #3b82f6;
+  color: #93c5fd;
+}
+.tt-conflict-bullet {
+  font-weight: bold;
+}
+.tt-conflict-desc {
+  font-size: 10px;
+}
+.tt-no-conflicts {
+  color: #34d399;
+  font-weight: 600;
+  font-size: 10px;
+}
+
+
 /* -------------------------------------------
    Scheduling V2 - New Components
    ------------------------------------------- */
@@ -2301,6 +2496,8 @@ select:focus-visible {
   flex-direction: column;
   gap: 8px;
   margin-top: 8px;
+  flex: 1;
+  overflow-y: auto;
 }
 .conflict-panel.empty { align-items: center; padding: 12px 0; }
 .cp-header {
@@ -2605,7 +2802,7 @@ select:focus-visible {
 /* Individual lesson card placed absolutely inside the day host */
 .schedv2-lesson-abs {
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
   transition: box-shadow 0.15s ease;
   box-sizing: border-box;
@@ -2621,5 +2818,16 @@ select:focus-visible {
   min-height: unset;
   margin: 0;
   border-radius: 5px;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Kéo thả: Ẩn triệt để tooltip và làm mờ card đang kéo */
+.schedv2.is-dragging .lesson-tooltip {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.lesson-card.dragging {
+  opacity: 0.4;
 }

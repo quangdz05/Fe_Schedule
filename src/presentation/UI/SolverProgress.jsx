@@ -24,9 +24,7 @@ export default function SolverProgress({ jobId, onCompleted, onFailed }) {
   useEffect(() => {
     if (!jobId) return;
     stopRef.current = false;
-    let attempts = 0;
-    const MAX = 120;
-    const INTERVAL = 3000;
+    const INTERVAL = 5000;
 
     const phaseLabel = (status, progress) => {
       if (status === SolveStatus.Queued || progress === 0) return "Đang khởi tạo";
@@ -39,11 +37,6 @@ export default function SolverProgress({ jobId, onCompleted, onFailed }) {
 
     const tick = async () => {
       if (stopRef.current) return;
-      attempts++;
-      if (attempts > MAX) {
-        onFailed?.(new Error("Timeout: quá thời gian chờ."));
-        return;
-      }
       try {
         const result = await pollSolveStatus(jobId);
         const status = result?.status ?? "";

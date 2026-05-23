@@ -123,6 +123,19 @@ export async function evaluateMove(sessionId, moves) {
   });
 }
 
+/**
+ * Lưu thay đổi thủ công vào memory của Backend.
+ * @param {string} sessionId
+ * @param {{ lessonId: number, newTimeSlotId: number|null, newRoomId: number|null }[]} moves
+ */
+export async function applyMove(sessionId, moves) {
+  const body = new EvaluateMoveRequest({ sessionId, moves });
+  return apiFetch("/api/schedule/apply-move", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
 // ─── 6. POST /api/schedule/hover-lesson ─────────────────────────────────
 /**
  * Lấy chi tiết lesson khi hover (multi-teacher, conflicts...).
@@ -150,8 +163,7 @@ export async function saveSession(sessionId) {
 }
 
 // ─── Helper: Poll cho đến khi hoàn thành ─────────────────────────────────
-const POLL_INTERVAL_MS = 3000;
-const MAX_POLL_ATTEMPTS = 120; // 6 phút max
+const POLL_INTERVAL_MS = 5000;
 
 /**
  * Poll solve status cho đến khi Completed hoặc Failed.
@@ -161,8 +173,6 @@ const MAX_POLL_ATTEMPTS = 120; // 6 phút max
  */
 export function waitForSolveResult(jobId, onProgress) {
   return new Promise((resolve, reject) => {
-    let attempts = 0;
-
     const phaseLabel = (status, pct) => {
       if (pct === 0 || status === SolveStatus.Queued) return "Đang khởi tạo...";
       if (status === SolveStatus.Running && pct < 50) return "Đang phân tích dữ liệu...";
@@ -172,11 +182,6 @@ export function waitForSolveResult(jobId, onProgress) {
     };
 
     const tick = async () => {
-      attempts++;
-      if (attempts > MAX_POLL_ATTEMPTS) {
-        return reject(new Error("Timeout: Solver mất quá nhiều thời gian."));
-      }
-
       try {
         const result = await pollSolveStatus(jobId);
         const status = result?.status ?? "";

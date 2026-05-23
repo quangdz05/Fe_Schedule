@@ -23,9 +23,9 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
   const total = conflicts.length;
 
   const levelMeta = {
-    0: { cls: "hard", icon: "[!]", label: "Nghiem trong" },
-    1: { cls: "soft", icon: "[i]", label: "Goi y" },
-    2: { cls: "warning", icon: "[!]", label: "Canh bao" },
+    0: { cls: "hard", icon: "[!]", label: "Nghiêm trọng" },
+    1: { cls: "soft", icon: "[i]", label: "Gợi ý" },
+    2: { cls: "warning", icon: "[!]", label: "Cảnh báo" },
   };
 
   const handleItemClick = (conflict) => {
