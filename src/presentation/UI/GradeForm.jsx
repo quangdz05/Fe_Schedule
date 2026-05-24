@@ -8,11 +8,12 @@ export default function GradeForm({ user, language = "English" }) {
   const [courses, setCourses] = useState([]);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const isVi = language === "Vietnamese";
 
   const t = {
-    student: isVi ? "Giảng Viên *" : "Lecturer *",
+    student: isVi ? "Giảng viên *" : "Lecturer *",
     cohort: isVi ? "Khóa *" : "Cohort *",
     selectCohort: isVi ? "Chọn khóa..." : "Select cohort...",
     unknownStudent: isVi ? "Không rõ giảng viên" : "Unknown Lecturer",
@@ -24,7 +25,7 @@ export default function GradeForm({ user, language = "English" }) {
     scenario: isVi ? "Scenario ID" : "Scenario ID",
     load: isVi ? "Tải dữ liệu" : "Load data",
     loadError: isVi ? "Vui lòng nhập scenarioId." : "Please enter scenarioId.",
-    noData: isVi ? "Chưa có dữ liệu." : "No data loaded."
+    noData: isVi ? "Chưa có dữ liệu giảng dạy cho lựa chọn này." : "No teaching data for this selection."
   };
 
   const cohorts = ["VJU2022", "VJU2023", "VJU2024", "VJU2025"];
@@ -42,7 +43,6 @@ export default function GradeForm({ user, language = "English" }) {
         id: String(lesson.id),
         name: subject?.name || `Môn ${lesson.subjectId}`,
         lecturer: teacher?.name || `GV ${lesson.teacherId}`,
-        lecturerIcon: "👨‍🏫",
         classGroup: group?.name || `Lớp ${lesson.studentGroupId}`,
         students: group?.size ?? 0,
         deliveryMode: lesson.deliveryMode ?? 0,
@@ -59,6 +59,7 @@ export default function GradeForm({ user, language = "English" }) {
 
     setIsLoading(true);
     setMessage("");
+    setHasLoaded(false);
     try {
       const result = await getScheduleResult(trimmedId);
       const schedule = result?.schedule || result;
@@ -66,9 +67,11 @@ export default function GradeForm({ user, language = "English" }) {
         throw new Error(t.noData);
       }
       setCourses(mapScheduleToCourses(schedule));
+      setHasLoaded(true);
     } catch (err) {
       setMessage(err.message || t.noData);
       setCourses([]);
+      setHasLoaded(true);
     } finally {
       setIsLoading(false);
     }
@@ -117,25 +120,29 @@ export default function GradeForm({ user, language = "English" }) {
 
       {message && <div className="grade-message">{message}</div>}
 
+      {hasLoaded && !message && courses.length === 0 && (
+        <div className="empty-state">{t.noData}</div>
+      )}
+
       {selectedCohort && courses.length > 0 && (
         <div className="schedule-table-wrapper">
-          <h3 style={{ marginBottom: '10px', fontSize: '1.1rem', color: '#333' }}>{t.scheduleList} - {selectedCohort}</h3>
-          <table className="demo-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <h3>{t.scheduleList} - {selectedCohort}</h3>
+          <table className="demo-table data-table">
             <thead>
               <tr>
-                <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>{t.courseCol}</th>
-                <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>{t.lecturerCol}</th>
-                <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>{t.classCol}</th>
-                <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>{t.modeCol}</th>
+                <th>{t.courseCol}</th>
+                <th>{t.lecturerCol}</th>
+                <th>{t.classCol}</th>
+                <th>{t.modeCol}</th>
               </tr>
             </thead>
             <tbody>
               {courses.map((course) => (
                 <tr key={course.id}>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{course.name}</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{course.lecturerIcon} {course.lecturer}</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{course.classGroup}</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #eee' }}>{DeliveryModeLabels[course.deliveryMode] || ""}</td>
+                  <td>{course.name}</td>
+                  <td>{course.lecturer}</td>
+                  <td>{course.classGroup}</td>
+                  <td>{DeliveryModeLabels[course.deliveryMode] || ""}</td>
                 </tr>
               ))}
             </tbody>

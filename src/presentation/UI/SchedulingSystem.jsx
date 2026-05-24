@@ -232,13 +232,20 @@ const LessonCard = memo(({
             <span className="meta-room" title={`Yêu cầu: ${lesson.reqRoom}`}>{lesson.roomName || lesson.reqRoom}</span>
             <span className="meta-cap">{lesson.cap} SV</span>
             {lesson.duration > 1 && <span className="meta-duration">{lesson.duration} tiết</span>}
+            {lesson.isAutoPlaceFailed && <span className="meta-warning">Cần kiểm tra</span>}
           </div>
         )}
       </div>
       {variant === "grid" && (
-        <span className="lesson-remove" title="Gỡ khỏi lịch" onClick={() => onRemove(lesson.id)}>
+        <button
+          className="lesson-remove"
+          type="button"
+          title="Gỡ khỏi lịch"
+          aria-label={`Gỡ ${lesson.name} khỏi lịch`}
+          onClick={() => onRemove(lesson.id)}
+        >
           ×
-        </span>
+        </button>
       )}
       {hoveredLessonId === lesson.id && !dragId && rect && createPortal(
         <div 
@@ -389,6 +396,7 @@ export default function SchedulingSystem() {
   const [scheduleState, setScheduleState] = useState("empty");
   const [dragId, setDragId] = useState(null);
   const [dragOver, setDragOver] = useState(null);
+  const [dragMessage, setDragMessage] = useState(null);
   const [selectedSectionIds, setSelectedSectionIds] = useState([]);
   const [conflicts, setConflicts] = useState([]);
   const [highlightedIds, setHighlightedIds] = useState(new Set());
@@ -562,6 +570,7 @@ export default function SchedulingSystem() {
     flushSync(() => {
       setHoveredLessonId(null);
       setDragId(lessonId);
+      setDragMessage({ type: "info", text: "Đang kéo lớp học. Các ô hợp lệ sẽ được viền nổi bật." });
     });
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", lessonId);
@@ -571,10 +580,12 @@ export default function SchedulingSystem() {
     isDraggingRef.current = false;
     setDragId(null);
     setDragOver(null);
+    setDragMessage(null);
   }, []);
 
   const handleRemoveLesson = useCallback((id) => {
     setLessons((p) => p.map((l) => l.id === id ? { ...l, slotId: null, roomId: null, roomName: null } : l));
+    setDragMessage({ type: "info", text: "Đã chuyển lớp về danh sách chờ xếp." });
   }, []);
 
   const onCellDragOver = useCallback((e, slotKey) => {
@@ -611,6 +622,7 @@ export default function SchedulingSystem() {
     if (!activeSession) {
       setLessons((prev) => prev.map((l) => l.id === id ? { ...l, slotId: slotKey } : l));
       if (scheduleState === "loaded") setScheduleState("manual");
+      setDragMessage({ type: "success", text: "Đã đặt lớp vào ô lịch." });
       return;
     }
 
@@ -618,6 +630,7 @@ export default function SchedulingSystem() {
     if (!matchingSlot) {
       setLessons((prev) => prev.map((l) => l.id === id ? { ...l, slotId: slotKey } : l));
       if (scheduleState === "loaded") setScheduleState("manual");
+      setDragMessage({ type: "warning", text: "Không tìm thấy timeslot tương ứng, đã đặt tạm trên giao diện." });
       return;
     }
 
@@ -642,6 +655,7 @@ export default function SchedulingSystem() {
       console.error("Evaluate move failed:", err);
       setLessons((prev) => prev.map((l) => l.id === id ? { ...l, slotId: slotKey } : l));
       if (scheduleState === "solved") setScheduleState("manual");
+      setDragMessage({ type: "warning", text: "Không đánh giá được xung đột từ server, đã đặt tạm trên giao diện." });
     }
   }, [dragId, sessionId, scenarioId, scheduleState, slotKeyToTimeSlot]);
 
@@ -655,6 +669,7 @@ export default function SchedulingSystem() {
     const activeSession = sessionId || scenarioId;
     if (!activeSession) {
       setLessons((prev) => prev.map((l) => l.id === id ? { ...l, slotId: null } : l));
+      setDragMessage({ type: "info", text: "Đã đưa lớp về danh sách chờ xếp." });
       return;
     }
 
@@ -675,6 +690,7 @@ export default function SchedulingSystem() {
     } catch (err) {
       console.error("Evaluate unassign failed:", err);
       setLessons((prev) => prev.map((l) => l.id === id ? { ...l, slotId: null } : l));
+      setDragMessage({ type: "warning", text: "Không đánh giá được thao tác gỡ lịch, đã cập nhật tạm trên giao diện." });
     }
   }, [dragId, sessionId, scenarioId]);
 
@@ -785,10 +801,10 @@ export default function SchedulingSystem() {
   };
 
   const stateMap = {
-    empty: { text: "Chua co du lieu", cls: "state-empty", icon: "" },
-    loaded: { text: "Da tai – Cho xep lich", cls: "state-loaded", icon: "" },
-    manual: { text: "Dang xep tay", cls: "state-manual", icon: "" },
-    solved: { text: "Da xep xong", cls: "state-solved", icon: "" },
+    empty: { text: "Chưa có dữ liệu", cls: "state-empty", icon: "" },
+    loaded: { text: "Đã tải, chờ xếp lịch", cls: "state-loaded", icon: "" },
+    manual: { text: "Đang chỉnh thủ công", cls: "state-manual", icon: "" },
+    solved: { text: "Đã xếp xong", cls: "state-solved", icon: "" },
   };
   const st = stateMap[scheduleState] || stateMap.empty;
 
@@ -953,6 +969,7 @@ export default function SchedulingSystem() {
                 if (res && res.newHardScore !== undefined) {
                   setApiScore(prev => ({ ...prev, hard: res.newHardScore, soft: res.newSoftScore || 0 }));
                 }
+                setDragMessage({ type: "success", text: "Đã áp dụng thay đổi lịch." });
                 setEvaluatePopup(null);
               }}>Xác nhận</button>
               <button className="ep-btn cancel" onClick={() => setEvaluatePopup(null)}>Hủy</button>
@@ -1007,10 +1024,11 @@ export default function SchedulingSystem() {
       {/* ═══ Status row ═══ */}
       <div className="schedv2-status-row">
         <span className={`schedv2-state-label ${st.cls}`}>{st.icon} {st.text}</span>
-        {(dataMessage || solveMessage) && (
+        {(dataMessage || solveMessage || dragMessage) && (
           <div className="schedv2-messages">
             {dataMessage && <span className={`schedv2-msg ${dataMessage.type}`}>{dataMessage.text}</span>}
             {solveMessage && <span className={`schedv2-msg ${solveMessage.type}`}>{solveMessage.text}</span>}
+            {dragMessage && <span className={`schedv2-msg ${dragMessage.type}`}>{dragMessage.text}</span>}
           </div>
         )}
         <div className="schedv2-score">
@@ -1159,12 +1177,16 @@ export default function SchedulingSystem() {
                   const hasLesson = (cellMap[sk] || []).length > 0;
                   return (
                     <div key={sk}
-                      className={`schedv2-grid-cell body ${di === 5 ? "sat" : ""} ${isOver && !hasLesson ? "drop-target" : ""}`}
+                      className={`schedv2-grid-cell body ${di === 5 ? "sat" : ""} ${isOver ? "drop-target" : ""} ${hasLesson ? "occupied-target" : ""}`}
                       style={{ gridRow: rowStart, gridColumn: di + 2 }}
                       onDragOver={(e) => onCellDragOver(e, sk)}
                       onDragLeave={onCellDragLeave}
                       onDrop={(e) => onCellDrop(e, sk)}>
-                      {isOver && !hasLesson && <div className="drop-placeholder">Thả vào đây</div>}
+                      {isOver && (
+                        <div className="drop-placeholder">
+                          {hasLesson ? "Thả để kiểm tra xung đột" : "Thả vào đây"}
+                        </div>
+                      )}
                     </div>
                   );
                 });

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ConflictLevel, ConflictLevelLabels, ConflictTypeLabelMap } from "../../constants/enums";
+import { ConflictTypeLabelMap } from "../../constants/enums";
 
 /**
  * ConflictPanel — hiển thị danh sách conflicts từ kết quả solve.
@@ -19,13 +19,12 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
     return groups;
   }, [conflicts]);
 
-  const badge = (lvl) => grouped[lvl]?.length || 0;
   const total = conflicts.length;
 
   const levelMeta = {
-    0: { cls: "hard", icon: "[!]", label: "Nghiêm trọng" },
-    1: { cls: "soft", icon: "[i]", label: "Gợi ý" },
-    2: { cls: "warning", icon: "[!]", label: "Cảnh báo" },
+    0: { cls: "hard", icon: "!", label: "Lỗi nặng" },
+    1: { cls: "soft", icon: "i", label: "Gợi ý" },
+    2: { cls: "warning", icon: "!", label: "Cảnh báo" },
   };
 
   const handleItemClick = (conflict) => {
@@ -42,8 +41,8 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
       <div className="conflict-panel empty">
         <div className="cp-header">Conflicts</div>
         <div className="cp-no-conflict">
-          <strong>Không có conflict!</strong>
-          <p>Lịch hoàn toàn hợp lệ.</p>
+          <strong>Không có xung đột</strong>
+          <p>Lịch hiện tại hợp lệ.</p>
         </div>
       </div>
     );
@@ -53,11 +52,6 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
     <div className="conflict-panel">
       <div className="cp-header">
         <span>Conflicts</span>
-        <div className="cp-badges">
-          {badge(0) > 0 && <span className="conflict-badge hard">[!] {badge(0)}</span>}
-          {badge(2) > 0 && <span className="conflict-badge warning">[!] {badge(2)}</span>}
-          {badge(1) > 0 && <span className="conflict-badge soft">[i] {badge(1)}</span>}
-        </div>
       </div>
 
       {[0, 2, 1].map((lvl) => {
@@ -78,14 +72,18 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
             {isOpen && (
               <div className="cp-group-items">
                 {grouped[lvl].map((c) => (
-                  <div
+                  <button
+                    type="button"
                     key={c.id}
                     className={`conflict-item ${meta.cls}`}
                     title="Click để highlight các lesson liên quan"
                     onClick={() => handleItemClick(c)}
                   >
-                    <div className="ci-desc">
-                      {c.description || ConflictTypeLabelMap[c.conflictType] || "Conflict không xác định"}
+                    <div className="ci-main">
+                      <div className="ci-desc">
+                        {c.description || ConflictTypeLabelMap[c.conflictType] || "Conflict không xác định"}
+                      </div>
+                      <span className="ci-action">Xem</span>
                     </div>
                     {c.affectedEntityIds?.length > 0 && (
                       <div className="ci-entities">
@@ -94,7 +92,7 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
                         ))}
                       </div>
                     )}
-                  </div>
+                  </button>
                 ))}
               </div>
             )}

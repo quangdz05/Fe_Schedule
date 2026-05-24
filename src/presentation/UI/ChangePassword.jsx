@@ -17,8 +17,11 @@ export default function ChangePassword({ user, language }) {
     btnSubmit: language === "Vietnamese" ? "Đổi mật khẩu" : "Change password",
     errEmpty: language === "Vietnamese" ? "Vui lòng nhập đầy đủ các trường." : "Please fill in all password fields.",
     errMatch: language === "Vietnamese" ? "Mật khẩu mới không khớp." : "New passwords do not match.",
+    errLength: language === "Vietnamese" ? "Mật khẩu mới cần tối thiểu 8 ký tự." : "New password must be at least 8 characters.",
+    errSame: language === "Vietnamese" ? "Mật khẩu mới phải khác mật khẩu cũ." : "New password must be different from the old password.",
     errOld: language === "Vietnamese" ? "Mật khẩu cũ không chính xác." : "Old password is incorrect.",
     success: language === "Vietnamese" ? "Đổi mật khẩu thành công!" : "Password changed successfully!",
+    requirement: language === "Vietnamese" ? "Tối thiểu 8 ký tự và nhập lại giống nhau." : "At least 8 characters and confirmation must match.",
   };
 
   const handleSubmit = async (e) => {
@@ -32,6 +35,16 @@ export default function ChangePassword({ user, language }) {
 
     if (newPassword !== confirmPassword) {
       setMessage({ type: "error", text: t.errMatch });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setMessage({ type: "error", text: t.errLength });
+      return;
+    }
+
+    if (newPassword === oldPassword) {
+      setMessage({ type: "error", text: t.errSame });
       return;
     }
     
@@ -54,12 +67,12 @@ export default function ChangePassword({ user, language }) {
       <form className="cp-form" onSubmit={handleSubmit}>
         <div className="cp-row">
           <label>{t.username}</label>
-          <input type="text" value={user.username} disabled className="cp-input" />
+          <input type="text" value={user?.username || ""} disabled className="cp-input" />
         </div>
         
         <div className="cp-row">
           <label>{t.fullName}</label>
-          <input type="text" value={user.name} disabled className="cp-input" />
+          <input type="text" value={user?.name || ""} disabled className="cp-input" />
         </div>
         
         <div className="cp-row cp-margin-top">
@@ -70,6 +83,7 @@ export default function ChangePassword({ user, language }) {
             value={oldPassword} 
             onChange={(e) => setOldPassword(e.target.value)} 
             className="cp-input"
+            autoComplete="current-password"
           />
         </div>
         
@@ -81,7 +95,9 @@ export default function ChangePassword({ user, language }) {
             value={newPassword} 
             onChange={(e) => setNewPassword(e.target.value)} 
             className="cp-input"
+            autoComplete="new-password"
           />
+          <span className="field-hint">{t.requirement}</span>
         </div>
         
         <div className="cp-row">
@@ -92,6 +108,7 @@ export default function ChangePassword({ user, language }) {
             value={confirmPassword} 
             onChange={(e) => setConfirmPassword(e.target.value)} 
             className="cp-input"
+            autoComplete="new-password"
           />
         </div>
 

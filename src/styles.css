@@ -3352,10 +3352,14 @@ select:focus-visible {
 }
 
 .conflict-badge {
+  border: 1px solid transparent;
   padding: 2px 8px;
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
 }
 
 .conflict-badge.hard {
@@ -3376,10 +3380,21 @@ select:focus-visible {
   border: 1px solid #bae6fd;
 }
 
+.conflict-badge:hover,
+.conflict-badge:focus-visible {
+  filter: brightness(.97);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .12);
+}
+
+.conflict-badge.active {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
 .cp-group {
   border-radius: 6px;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: visible;
   border: 1px solid #f1f5f9;
 }
 
@@ -3399,12 +3414,17 @@ select:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 3;
   padding: 7px 10px;
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   width: 100%;
   border: none;
+  border-bottom: 1px solid rgba(15, 23, 42, .08);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .08);
   text-align: left;
 }
 
@@ -3922,4 +3942,495 @@ select:focus-visible {
 
 .lesson-card.dragging {
   opacity: 0.4;
+}
+
+/* UI/UX polish: shell, accessibility, tables, and responsive scheduling */
+html {
+  min-width: 320px;
+}
+
+body {
+  line-height: 1.45;
+}
+
+button,
+input,
+select {
+  min-width: 0;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.conflict-item:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+.app-shell .top-header {
+  padding: 8px 12px 6px;
+}
+
+.app-shell .brand-wrap {
+  max-width: 840px;
+  gap: 14px;
+}
+
+.app-shell .logo-image {
+  width: 58px;
+  height: 58px;
+}
+
+.app-shell .title-group p {
+  font-size: 13px;
+}
+
+.app-shell .title-group h1 {
+  margin-top: 3px;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.top-nav {
+  background: #9f1621;
+}
+
+.nav-list {
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.nav-btn {
+  white-space: nowrap;
+}
+
+.nav-btn-active {
+  background: #ffffff;
+  color: #9f1621;
+  border-color: #ffffff;
+}
+
+.content.content-wide {
+  max-width: none;
+}
+
+.bottom-footer {
+  background: #9f1621;
+}
+
+.schedv2-grid-wrap,
+.schedule-table-wrapper,
+.user-table-wrap,
+.sp-table-wrap {
+  overflow-x: auto;
+}
+
+.schedv2-grid-table {
+  min-width: 860px;
+}
+
+.schedv2-grid-cell.day,
+.schedv2-grid-cell.time {
+  color: #1f2937;
+}
+
+.schedv2-grid-cell.body.occupied-target {
+  background: #f8fafc;
+}
+
+.schedv2-grid-cell.body.drop-target.occupied-target {
+  background: #fff7ed !important;
+  outline-color: #f97316 !important;
+}
+
+.drop-placeholder {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .78);
+  text-align: center;
+}
+
+.lesson-card .lesson-remove {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, .18);
+  color: #64748b;
+}
+
+.lesson-card .lesson-remove:hover {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.lesson-card.grid {
+  border-color: #cbd5e1;
+}
+
+.lesson-card.grid strong,
+.lesson-card.grid .lesson-teacher {
+  letter-spacing: 0;
+}
+
+.meta-warning {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.lesson-tooltip {
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(620px, calc(100vh - 32px));
+  overflow-y: auto;
+}
+
+.conflict-item {
+  width: 100%;
+  display: block;
+  appearance: none;
+  background: #ffffff;
+  border-right: 0;
+  border-bottom: 0;
+  text-align: left;
+  font-family: inherit;
+  border-radius: 0;
+  position: relative;
+}
+
+.conflict-item:hover,
+.conflict-item:focus-visible {
+  background: #f1f5f9;
+}
+
+.conflict-item:hover .ci-action,
+.conflict-item:focus-visible .ci-action {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.ci-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: start;
+}
+
+.ci-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background var(--transition), color var(--transition);
+}
+
+.cp-no-conflict p {
+  margin: 0;
+  color: #475569;
+}
+
+.cp-group-header {
+  font-family: inherit;
+}
+
+.form-card,
+.user-card,
+.cp-form,
+.schedv2-panel,
+.schedv2-grid,
+.schedv2-header,
+.schedv2-section-picker-wrap {
+  border-color: #e2e8f0;
+}
+
+.form-card input,
+.form-card select,
+.cp-input,
+.user-field input,
+.user-field select,
+.user-table-toolbar input,
+.user-table-toolbar select {
+  min-height: 38px;
+  border-color: #cbd5e1;
+}
+
+.grade-message,
+.empty-state,
+.table-empty {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+}
+
+.grade-message {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #fed7aa;
+}
+
+.schedule-table-wrapper h3 {
+  margin: 18px 0 10px;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 640px;
+}
+
+.data-table th,
+.data-table td,
+.user-output-light .demo-table th,
+.user-output-light .demo-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.data-table th,
+.user-output-light .demo-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+}
+
+.cp-form {
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow);
+}
+
+.cp-row {
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cp-row label {
+  padding-top: 8px;
+}
+
+.field-hint {
+  flex-basis: calc(100% - 158px);
+  margin-left: 158px;
+  margin-top: -6px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.cp-btn {
+  background: #9f1621;
+  color: #ffffff;
+  border-color: #9f1621;
+}
+
+.cp-btn:hover {
+  background: #85111b;
+}
+
+.user-output-light {
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
+  margin-top: 20px;
+  max-height: none;
+}
+
+.user-output-header,
+.user-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.user-output-header h4 {
+  margin: 0;
+}
+
+.user-table-toolbar input {
+  flex: 1;
+  min-width: 220px;
+  padding: 0 10px;
+}
+
+.user-table-toolbar select {
+  min-width: 150px;
+  padding: 0 10px;
+}
+
+.user-table-wrap {
+  max-height: 320px;
+}
+
+.role-chip,
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.role-admin {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.role-teacher {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.role-student {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-chip {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.table-empty {
+  text-align: center;
+}
+
+.app-error {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f8fafc;
+}
+
+.app-error-panel {
+  width: min(560px, 100%);
+  padding: 28px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow);
+}
+
+.app-error-kicker {
+  margin: 0 0 8px;
+  color: #9f1621;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.app-error-panel h1 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: #111827;
+}
+
+.app-error-panel p {
+  margin: 0 0 14px;
+  color: #475569;
+}
+
+.app-error-detail {
+  max-height: 160px;
+  overflow: auto;
+  margin: 0 0 16px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #111827;
+  color: #f8fafc;
+  font-size: 12px;
+}
+
+@media (max-width: 1200px) {
+  .schedv2-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .schedv2-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell .brand-wrap {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .app-shell .logo-image {
+    width: 46px;
+    height: 46px;
+  }
+
+  .app-shell .title-group {
+    text-align: left;
+  }
+
+  .app-shell .title-group p {
+    font-size: 11px;
+  }
+
+  .app-shell .title-group h1 {
+    font-size: 17px;
+  }
+
+  .nav-actions {
+    flex-wrap: wrap;
+  }
+
+  .schedv2-actions,
+  .schedv2-status-row,
+  .schedv2-legend,
+  .schedv2-filter-row {
+    align-items: stretch;
+  }
+
+  .schedv2-input,
+  .schedv2-btn,
+  .schedv2-filter,
+  .score-pill {
+    width: 100%;
+  }
+
+  .field-hint {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .cp-row label {
+    width: 100%;
+    padding-top: 0;
+  }
+}
+.progress-bar-animated {
+  height: 100%;
+  background-color: #6366f1; /* Hoặc mã màu tím hệ thống của bạn */
+  border-radius: 9999px;
+  
+  /* Cực kỳ quan trọng để làm mịn thanh tiến trình */
+  transition: width 0.15s ease-out; 
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import * as XLSX from "xlsx";
 import { createUsers } from "../../services/userService";
 
@@ -45,36 +45,52 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
   const [isParsing, setIsParsing] = useState(false);
   const [exportFileName, setExportFileName] = useState("users-export.xlsx");
   const [createdUsers, setCreatedUsers] = useState([]);
+  const [userSearchTerm, setUserSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("All");
 
   const t = {
-    title: isVi ? "Tao tai khoan nguoi dung" : "Create user accounts",
-    subtitle: isVi ? "Chi admin moi co quyen tao tai khoan" : "Only admin can create accounts",
+    title: isVi ? "Tạo tài khoản người dùng" : "Create user accounts",
+    subtitle: isVi ? "Chỉ admin mới có quyền tạo tài khoản" : "Only admin can create accounts",
     email: "Email",
-    username: isVi ? "Ten dang nhap" : "Username",
-    role: isVi ? "Vai tro" : "Role",
-    addRow: isVi ? "Them dong" : "Add row",
-    removeRow: isVi ? "Xoa dong" : "Remove row",
-    submit: isVi ? "Tao tai khoan" : "Create accounts",
-    empty: isVi ? "Vui long nhap day du thong tin." : "Please fill in all fields.",
-    success: isVi ? "Tao tai khoan thanh cong." : "Accounts created successfully.",
-    noPermission: isVi ? "Ban khong co quyen tao tai khoan." : "You do not have permission to create accounts.",
-    importLabel: isVi ? "Tai file users.xlsx" : "Upload users.xlsx",
+    username: isVi ? "Tên đăng nhập" : "Username",
+    role: isVi ? "Vai trò" : "Role",
+    addRow: isVi ? "Thêm dòng" : "Add row",
+    removeRow: isVi ? "Xóa dòng" : "Remove row",
+    submit: isVi ? "Tạo tài khoản" : "Create accounts",
+    empty: isVi ? "Vui lòng nhập đầy đủ thông tin." : "Please fill in all fields.",
+    success: isVi ? "Tạo tài khoản thành công." : "Accounts created successfully.",
+    noPermission: isVi ? "Bạn không có quyền tạo tài khoản." : "You do not have permission to create accounts.",
+    importLabel: isVi ? "Tải file users.xlsx" : "Upload users.xlsx",
     importHint: isVi
-      ? "File can co cot: email, userName, role (0=Admin,1=Teacher,2=Student)."
+      ? "File cần có cột: email, userName, role (0=Admin, 1=Teacher, 2=Student)."
       : "File columns: email, userName, role (0=Admin,1=Teacher,2=Student).",
-    clearList: isVi ? "Xoa danh sach" : "Clear list",
-    importDone: isVi ? "Da tai" : "Loaded",
-    exportTitle: isVi ? "Xuat danh sach" : "Export list",
+    clearList: isVi ? "Xóa danh sách" : "Clear list",
+    importDone: isVi ? "Đã tải" : "Loaded",
+    exportTitle: isVi ? "Xuất danh sách" : "Export list",
     exportHint: isVi
-      ? "Xuat Excel co mat khau ngau nhien cho tung user."
+      ? "Xuất Excel có mật khẩu ngẫu nhiên cho từng user."
       : "Export Excel with random passwords per user.",
-    exportPrompt: isVi ? "Nhap ten file xuat:" : "Enter export file name:",
-    exportNameEmpty: isVi ? "Ten file khong hop le." : "Invalid file name.",
-    exportBtn: isVi ? "Xuat Excel" : "Export Excel",
-    exportEmpty: isVi ? "Danh sach trong, khong the xuat." : "List is empty, cannot export.",
-    createdAccounts: isVi ? "Tài khoản đã tạo:" : "Created Accounts:",
-    exportCreatedBtn: isVi ? "Xuất Excel Kết Quả" : "Export Results",
+    exportPrompt: isVi ? "Nhập tên file xuất:" : "Enter export file name:",
+    exportNameEmpty: isVi ? "Tên file không hợp lệ." : "Invalid file name.",
+    exportBtn: isVi ? "Xuất Excel" : "Export Excel",
+    exportEmpty: isVi ? "Danh sách trống, không thể xuất." : "List is empty, cannot export.",
+    createdAccounts: isVi ? "Tài khoản đã tạo" : "Created accounts",
+    exportCreatedBtn: isVi ? "Xuất Excel kết quả" : "Export results",
+    search: isVi ? "Tìm theo email hoặc username" : "Search by email or username",
+    allRoles: isVi ? "Tất cả vai trò" : "All roles",
+    status: isVi ? "Trạng thái" : "Status",
+    createdAt: isVi ? "Ngày tạo" : "Created at",
   };
+
+  const filteredCreatedUsers = useMemo(() => {
+    const query = userSearchTerm.trim().toLowerCase();
+    return createdUsers.filter((row) => {
+      const roleName = mapRoleName(row.role ?? row.roleName);
+      const matchesRole = roleFilter === "All" || roleName === roleFilter;
+      const haystack = `${row.email || ""} ${row.userName || ""}`.toLowerCase();
+      return matchesRole && (!query || haystack.includes(query));
+    });
+  }, [createdUsers, userSearchTerm, roleFilter]);
 
   const updateRow = (index, key, value) => {
     setRows((prev) => prev.map((row, i) => (i === index ? { ...row, [key]: value } : row)));
@@ -178,7 +194,13 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
       setMessage({ type: "success", text: response?.message || t.success });
       setRows([{ ...defaultRow }]);
       if (response && response.data && response.data.length > 0) {
-        setCreatedUsers(response.data);
+        const createdAt = new Date().toLocaleString(isVi ? "vi-VN" : "en-US");
+        setCreatedUsers(response.data.map((row) => ({
+          ...row,
+          roleName: mapRoleName(row.role ?? row.roleName),
+          status: row.status || (isVi ? "Đã tạo" : "Created"),
+          createdAt: row.createdAt || createdAt,
+        })));
       }
     } catch (err) {
       setMessage({ type: "error", text: err.message || t.empty });
@@ -202,12 +224,14 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
     const exportRows = createdUsers.map((row) => ({
       email: row.email,
       userName: row.userName,
-      role: row.role,
+      role: mapRoleName(row.role ?? row.roleName),
+      status: row.status,
+      createdAt: row.createdAt,
       password: row.generatedPassword
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportRows, {
-      header: ["email", "userName", "role", "password"]
+      header: ["email", "userName", "role", "status", "createdAt", "password"]
     });
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "users_created");
@@ -319,30 +343,55 @@ export default function UserManagement({ user, language = "Vietnamese" }) {
         )}
 
         {createdUsers.length > 0 && (
-          <div className="user-output" style={{ background: '#f8fafc', color: '#0f172a', border: '1px solid #e2e8f0', marginTop: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <h4 style={{ margin: 0 }}>{t.createdAccounts}</h4>
+          <div className="user-output user-output-light">
+            <div className="user-output-header">
+              <h4>{t.createdAccounts}</h4>
               <button type="button" className="user-btn" onClick={handleExportCreated}>
                 {t.exportCreatedBtn}
               </button>
             </div>
-            <div style={{ maxHeight: '300px', overflow: 'auto' }}>
+            <div className="user-table-toolbar">
+              <input
+                type="search"
+                value={userSearchTerm}
+                onChange={(e) => setUserSearchTerm(e.target.value)}
+                placeholder={t.search}
+              />
+              <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}>
+                <option value="All">{t.allRoles}</option>
+                {roleOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.value}</option>
+                ))}
+              </select>
+            </div>
+            <div className="user-table-wrap">
               <table className="demo-table">
                 <thead>
                   <tr>
                     <th>Email</th>
                     <th>Username</th>
+                    <th>{t.role}</th>
+                    <th>{t.status}</th>
+                    <th>{t.createdAt}</th>
                     <th>Password</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {createdUsers.map((u, i) => (
+                  {filteredCreatedUsers.map((u, i) => (
                     <tr key={i}>
                       <td>{u.email}</td>
                       <td>{u.userName}</td>
+                      <td><span className={`role-chip role-${mapRoleName(u.role ?? u.roleName).toLowerCase()}`}>{mapRoleName(u.role ?? u.roleName)}</span></td>
+                      <td><span className="status-chip">{u.status}</span></td>
+                      <td>{u.createdAt}</td>
                       <td><code>{u.generatedPassword}</code></td>
                     </tr>
                   ))}
+                  {filteredCreatedUsers.length === 0 && (
+                    <tr>
+                      <td colSpan="6" className="table-empty">Không có tài khoản phù hợp bộ lọc.</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

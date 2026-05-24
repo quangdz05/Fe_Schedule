@@ -31,13 +31,14 @@ export default function App() {
   const [language, setLanguage] = useState("Vietnamese");
 
   const normalizeRole = (value) => String(value || "").toLowerCase();
+  const visibleNavItems = NAV_ITEMS.filter((item) => item !== "User Guide For Student");
   const getAllowedNavItems = (role) => {
-    if (role === "admin") return NAV_ITEMS;
-    if (role === "teacher") return NAV_ITEMS.filter((item) => item !== "User Management");
+    if (role === "admin") return visibleNavItems;
+    if (role === "teacher") return visibleNavItems.filter((item) => item !== "User Management");
     if (role === "student") {
-      return NAV_ITEMS.filter((item) => item !== "User Management" && item !== "Grade");
+      return visibleNavItems.filter((item) => item !== "User Management" && item !== "Grade");
     }
-    return NAV_ITEMS.filter((item) => item !== "User Management");
+    return visibleNavItems.filter((item) => item !== "User Management");
   };
 
   const translateNav = (item, lang) => {
@@ -76,7 +77,7 @@ export default function App() {
 
   // Logged in → show main app
   return (
-    <div className="page" style={{ "--page-bg-pattern": `url(${backgroundPattern})` }}>
+    <div className="page app-shell" style={{ "--page-bg-pattern": `url(${backgroundPattern})` }}>
       <Header language={language} />
 
       {/* ═══ Navigation ═══ */}
