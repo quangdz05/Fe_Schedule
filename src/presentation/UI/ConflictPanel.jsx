@@ -2,12 +2,14 @@ import { useMemo, useState } from "react";
 import { ConflictTypeLabelMap } from "../../constants/enums";
 
 /**
- * ConflictPanel — hiển thị danh sách conflicts từ kết quả solve.
- * Props:
- *   conflicts[]                — mảng ScheduleConflictDto
- *   onHighlightLessons(ids[])  — callback khi click conflict item
+ * ConflictPanel - hien thi danh sach conflicts theo pham vi dang xem.
  */
-export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
+export default function ConflictPanel({
+  conflicts = [],
+  scopeLabel = "Toàn trường",
+  totalCount = conflicts.length,
+  onHighlightLessons
+}) {
   const [expanded, setExpanded] = useState({ 0: true, 1: false, 2: false });
 
   const grouped = useMemo(() => {
@@ -36,13 +38,24 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
   const toggleGroup = (lvl) =>
     setExpanded((prev) => ({ ...prev, [lvl]: !prev[lvl] }));
 
+  const renderHeader = () => (
+    <div className="cp-header">
+      <div className="cp-title-wrap">
+        <span>Conflicts</span>
+        <span className="cp-scope">{scopeLabel}</span>
+      </div>
+      {totalCount > total && <span className="cp-total-note">{total}/{totalCount}</span>}
+      {totalCount > 0 && total === 0 && <span className="cp-total-note">0/{totalCount}</span>}
+    </div>
+  );
+
   if (total === 0) {
     return (
       <div className="conflict-panel empty">
-        <div className="cp-header">Conflicts</div>
+        {renderHeader()}
         <div className="cp-no-conflict">
           <strong>Không có xung đột</strong>
-          <p>Lịch hiện tại hợp lệ.</p>
+          <p>Phạm vi {scopeLabel} hiện tại hợp lệ.</p>
         </div>
       </div>
     );
@@ -50,9 +63,7 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
 
   return (
     <div className="conflict-panel">
-      <div className="cp-header">
-        <span>Conflicts</span>
-      </div>
+      {renderHeader()}
 
       {[0, 2, 1].map((lvl) => {
         if (grouped[lvl].length === 0) return null;
@@ -90,6 +101,16 @@ export default function ConflictPanel({ conflicts = [], onHighlightLessons }) {
                         {c.affectedEntityIds.map((id) => (
                           <span key={id} className="ci-entity-id">#{id}</span>
                         ))}
+                      </div>
+                    )}
+                    {c.scopeLabels?.length > 0 && (
+                      <div className="ci-scopes">
+                        {c.scopeLabels.slice(0, 3).map((label) => (
+                          <span key={label} className="ci-scope-chip">{label}</span>
+                        ))}
+                        {c.scopeLabels.length > 3 && (
+                          <span className="ci-scope-chip more">+{c.scopeLabels.length - 3}</span>
+                        )}
                       </div>
                     )}
                   </button>

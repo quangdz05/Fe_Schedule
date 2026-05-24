@@ -480,8 +480,64 @@ export default function SchedulingSystem() {
 
   const allUnassigned = lessons.filter((l) => !l.slotId);
   const unassignedLessons = filteredLessons.filter((l) => !l.slotId);
+  const pendingLessonGroups = useMemo(() => ([
+    {
+      key: "required",
+      label: "Bắt buộc",
+      lessons: unassignedLessons.filter((lesson) => lesson.isRequired),
+    },
+    {
+      key: "elective",
+      label: "Tự chọn",
+      lessons: unassignedLessons.filter((lesson) => !lesson.isRequired),
+    },
+  ]), [unassignedLessons]);
   const allPlaced = lessons.filter((l) => l.slotId);
   const placedLessons = filteredLessons.filter((l) => l.slotId);
+
+  const lessonById = useMemo(() => {
+    return new Map(lessons.map((lesson) => [String(lesson.id), lesson]));
+  }, [lessons]);
+
+  const filteredLessonIds = useMemo(() => {
+    return new Set(filteredLessons.map((lesson) => String(lesson.id)));
+  }, [filteredLessons]);
+
+  const conflictScopeLabel = useMemo(() => {
+    if (selectedMajor === "ALL") return "Toàn trường";
+    return selectedYear ? `${selectedMajor} - Năm ${selectedYear}` : selectedMajor;
+  }, [selectedMajor, selectedYear]);
+
+  const scopedConflicts = useMemo(() => {
+    const isWholeSchool = selectedMajor === "ALL" && selectedYear === null;
+
+    return conflicts
+      .map((conflict) => {
+        const affectedIds = (conflict.affectedEntityIds || []).map((id) => String(id));
+        const linkedLessons = affectedIds
+          .map((id) => lessonById.get(id))
+          .filter(Boolean);
+        const visibleLinkedLessons = linkedLessons
+          .filter((lesson) => filteredLessonIds.has(String(lesson.id)));
+
+        if (!isWholeSchool && linkedLessons.length === 0) return null;
+        if (!isWholeSchool && visibleLinkedLessons.length === 0) return null;
+
+        const scopeLessons = linkedLessons.length > 0 ? linkedLessons : visibleLinkedLessons;
+        const scopeLabels = Array.from(new Set(
+          scopeLessons.map((lesson) => {
+            const major = lesson.major || "GEN";
+            return lesson.year ? `${major} - Năm ${lesson.year}` : major;
+          })
+        )).sort();
+
+        return {
+          ...conflict,
+          scopeLabels: scopeLabels.length > 0 ? scopeLabels : ["Toàn trường"],
+        };
+      })
+      .filter(Boolean);
+  }, [conflicts, filteredLessonIds, lessonById, selectedMajor, selectedYear]);
 
   const cellMap = useMemo(() => {
     const map = {};
@@ -1105,23 +1161,36 @@ export default function SchedulingSystem() {
                   : "Tat ca lop da duoc xep."}
               </div>
             ) : (
-              unassignedLessons.map((l) => (
-                <LessonCard
-                  key={l.id}
-                  lesson={l}
-                  variant="pending"
-                  dragId={dragId}
-                  isHighlighted={highlightedIds.has(Number(l.id))}
-                  hoveredLessonId={hoveredLessonId}
-                  isHoverLoading={isHoverLoading}
-                  hoverDetails={hoverDetails}
-                  onDragStart={onDragStart}
-                  onDragEnd={onDragEnd}
-                  onRemove={handleRemoveLesson}
-                  onHover={handleLessonHover}
-                  onHoverLeave={handleLessonHoverLeave}
-                />
-              ))
+              pendingLessonGroups.map((group) => {
+                if (group.lessons.length === 0) return null;
+                return (
+                  <div key={group.key} className={`pending-group ${group.key}`}>
+                    <div className="pending-group-header">
+                      <span><span className={`legend-dot ${group.key}`} />{group.label}</span>
+                      <span className="pending-group-count">{group.lessons.length}</span>
+                    </div>
+                    <div className="pending-group-items">
+                      {group.lessons.map((l) => (
+                        <LessonCard
+                          key={l.id}
+                          lesson={l}
+                          variant="pending"
+                          dragId={dragId}
+                          isHighlighted={highlightedIds.has(Number(l.id))}
+                          hoveredLessonId={hoveredLessonId}
+                          isHoverLoading={isHoverLoading}
+                          hoverDetails={hoverDetails}
+                          onDragStart={onDragStart}
+                          onDragEnd={onDragEnd}
+                          onRemove={handleRemoveLesson}
+                          onHover={handleLessonHover}
+                          onHoverLeave={handleLessonHoverLeave}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
         </aside>
@@ -1320,7 +1389,9 @@ export default function SchedulingSystem() {
             </div>
           )}
           <ConflictPanel
-            conflicts={conflicts}
+            conflicts={scopedConflicts}
+            scopeLabel={conflictScopeLabel}
+            totalCount={conflicts.length}
             onHighlightLessons={(ids) => setHighlightedIds(new Set(ids))}
           />
         </aside>
