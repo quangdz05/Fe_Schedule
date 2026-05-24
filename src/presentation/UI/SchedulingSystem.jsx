@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import { memo, useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { createPortal, flushSync } from "react-dom";
 import {
   getScheduleResult, solveSchedule, waitForSolveResult,
@@ -160,7 +160,7 @@ const buildLessonsFromSchedule = (schedule, assignSlots = true) => {
 
 
 /* ─── Lesson Card ─── */
-const LessonCard = React.memo(({
+const LessonCard = memo(({
   lesson,
   variant = "grid",
   dragId,
