@@ -1,1 +1,1 @@
-export const BASE_URL = "http://localhost:5243";
+export const BASE_URL = "https://agreement-imagination-computers-dispatch.trycloudflare.com";

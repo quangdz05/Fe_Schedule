@@ -402,6 +402,11 @@ export default function SchedulingSystem() {
   const [highlightedIds, setHighlightedIds] = useState(new Set());
   const [saveMessage, setSaveMessage] = useState(null);
   const [showSectionPicker, setShowSectionPicker] = useState(true);
+  const [showPendingList, setShowPendingList] = useState(false);
+  const [pendingGroupsExpanded, setPendingGroupsExpanded] = useState({
+    required: true,
+    elective: false,
+  });
   const [evaluatePopup, setEvaluatePopup] = useState(null);
   const [hoverDetails, setHoverDetails] = useState({});
   const [hoveredLessonId, setHoveredLessonId] = useState(null);
@@ -492,6 +497,9 @@ export default function SchedulingSystem() {
       lessons: unassignedLessons.filter((lesson) => !lesson.isRequired),
     },
   ]), [unassignedLessons]);
+  const togglePendingGroup = useCallback((groupKey) => {
+    setPendingGroupsExpanded((prev) => ({ ...prev, [groupKey]: !prev[groupKey] }));
+  }, []);
   const allPlaced = lessons.filter((l) => l.slotId);
   const placedLessons = filteredLessons.filter((l) => l.slotId);
 
@@ -1144,55 +1152,83 @@ export default function SchedulingSystem() {
       {/* ═══ Main layout ═══ */}
       <div className="schedv2-layout">
         {/* Left panel: Pending lessons */}
-        <aside className="schedv2-panel" onDragOver={onPanelDragOver} onDragLeave={onCellDragLeave} onDrop={onPanelDrop}>
+        <aside
+          className={`schedv2-panel pending-panel ${showPendingList ? "is-open" : "is-collapsed"} ${dragOver === "panel" ? "drop-target" : ""}`}
+          onDragOver={onPanelDragOver}
+          onDragLeave={onCellDragLeave}
+          onDrop={onPanelDrop}
+        >
           <div className="panel-header">
-            <span>Lớp chờ xếp {selectedMajor !== "ALL" ? `(${selectedMajor}${selectedYear ? ` – Năm ${selectedYear}` : ""})` : ""}</span>
-            <span className="panel-count">{unassignedLessons.length}</span>
+            <div className="pending-panel-title">
+              <span>Lớp chờ xếp {selectedMajor !== "ALL" ? `(${selectedMajor}${selectedYear ? ` – Năm ${selectedYear}` : ""})` : ""}</span>
+              <span className="panel-count">{unassignedLessons.length}</span>
+            </div>
+            <button
+              type="button"
+              className="pending-panel-toggle"
+              aria-expanded={showPendingList}
+              onClick={() => setShowPendingList((value) => !value)}
+            >
+              {showPendingList ? "Ẩn" : "Hiện"}
+            </button>
           </div>
-          <div className="panel-legend">
-            <span><span className="legend-dot required" />Bắt buộc</span>
-            <span><span className="legend-dot elective" />Tự chọn</span>
-          </div>
-          <div className={`panel-list ${dragOver === "panel" ? "drop-target" : ""}`}>
-            {unassignedLessons.length === 0 ? (
-              <div className="panel-empty">
-                {scheduleState === "empty"
-                  ? "Chon sections va nhan 'Xep lich'."
-                  : "Tat ca lop da duoc xep."}
+          {showPendingList && (
+            <>
+              <div className="panel-legend">
+                <span><span className="legend-dot required" />Bắt buộc</span>
+                <span><span className="legend-dot elective" />Tự chọn</span>
               </div>
-            ) : (
-              pendingLessonGroups.map((group) => {
-                if (group.lessons.length === 0) return null;
-                return (
-                  <div key={group.key} className={`pending-group ${group.key}`}>
-                    <div className="pending-group-header">
-                      <span><span className={`legend-dot ${group.key}`} />{group.label}</span>
-                      <span className="pending-group-count">{group.lessons.length}</span>
-                    </div>
-                    <div className="pending-group-items">
-                      {group.lessons.map((l) => (
-                        <LessonCard
-                          key={l.id}
-                          lesson={l}
-                          variant="pending"
-                          dragId={dragId}
-                          isHighlighted={highlightedIds.has(Number(l.id))}
-                          hoveredLessonId={hoveredLessonId}
-                          isHoverLoading={isHoverLoading}
-                          hoverDetails={hoverDetails}
-                          onDragStart={onDragStart}
-                          onDragEnd={onDragEnd}
-                          onRemove={handleRemoveLesson}
-                          onHover={handleLessonHover}
-                          onHoverLeave={handleLessonHoverLeave}
-                        />
-                      ))}
-                    </div>
+              <div className={`panel-list ${dragOver === "panel" ? "drop-target" : ""}`}>
+                {unassignedLessons.length === 0 ? (
+                  <div className="panel-empty">
+                    {scheduleState === "empty"
+                      ? "Chon sections va nhan 'Xep lich'."
+                      : "Tat ca lop da duoc xep."}
                   </div>
-                );
-              })
-            )}
-          </div>
+                ) : (
+                  pendingLessonGroups.map((group) => {
+                    if (group.lessons.length === 0) return null;
+                    const isGroupOpen = Boolean(pendingGroupsExpanded[group.key]);
+                    return (
+                      <div key={group.key} className={`pending-group ${group.key}`}>
+                        <button
+                          type="button"
+                          className="pending-group-header"
+                          aria-expanded={isGroupOpen}
+                          onClick={() => togglePendingGroup(group.key)}
+                        >
+                          <span><span className={`legend-dot ${group.key}`} />{group.label}</span>
+                          <span className="pending-group-count">{group.lessons.length}</span>
+                          <span className="pending-group-chevron">{isGroupOpen ? "▲" : "▼"}</span>
+                        </button>
+                        {isGroupOpen && (
+                          <div className="pending-group-items">
+                            {group.lessons.map((l) => (
+                              <LessonCard
+                                key={l.id}
+                                lesson={l}
+                                variant="pending"
+                                dragId={dragId}
+                                isHighlighted={highlightedIds.has(Number(l.id))}
+                                hoveredLessonId={hoveredLessonId}
+                                isHoverLoading={isHoverLoading}
+                                hoverDetails={hoverDetails}
+                                onDragStart={onDragStart}
+                                onDragEnd={onDragEnd}
+                                onRemove={handleRemoveLesson}
+                                onHover={handleLessonHover}
+                                onHoverLeave={handleLessonHoverLeave}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </>
+          )}
         </aside>
 
         {/* Center: Timetable grid */}
