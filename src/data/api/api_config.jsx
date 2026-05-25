@@ -1,1 +1,1 @@
-export const BASE_URL = "https://bizarre-generators-stopping-listening.trycloudflare.com";
+export const BASE_URL = "http://localhost:5243";
