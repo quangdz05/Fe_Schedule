@@ -207,3 +207,22 @@ export function waitForSolveResult(jobId, onProgress) {
     tick();
   });
 }
+
+// ─── 8. GET /api/schedule/list ───────────────────────────────────────────
+/**
+ * Lấy danh sách tất cả lịch đã lưu trong DB (Admin).
+ */
+export async function getScheduleList() {
+  return apiFetch("/api/schedule/list");
+}
+
+// ─── 9. POST /api/schedule/{id}/publish ──────────────────────────────────
+export async function publishSchedule(scheduleId) {
+  return apiFetch(`/api/schedule/${scheduleId}/publish`, { method: "POST" });
+}
+
+// ─── 10. POST /api/schedule/{id}/archive ─────────────────────────────────
+export async function archiveSchedule(scheduleId) {
+  return apiFetch(`/api/schedule/${scheduleId}/archive`, { method: "POST" });
+}
+

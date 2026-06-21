@@ -8,6 +8,11 @@ import GradeForm from "./presentation/UI/GradeForm";
 import SchedulingSystem from "./presentation/UI/SchedulingSystem";
 import ChangePassword from "./presentation/UI/ChangePassword";
 import UserManagement from "./presentation/UI/UserManagement";
+import LecturerDashboard from "./presentation/UI/LecturerDashboard";
+import LecturerConstraints from "./presentation/UI/LecturerConstraints";
+import StudentDashboard from "./presentation/UI/StudentDashboard";
+import SemesterManager from "./presentation/UI/SemesterManager";
+import ScheduleListManager from "./presentation/UI/ScheduleListManager";
 import backgroundPattern from "../assets/images/background.png";
 
 export default function App() {
@@ -29,14 +34,26 @@ export default function App() {
   }, [user]);
   const [activePage, setActivePage] = useState("Scheduling");
   const [language, setLanguage] = useState("Vietnamese");
+  const [initialScenarioId, setInitialScenarioId] = useState(null);
 
   const normalizeRole = (value) => String(value || "").toLowerCase();
   const visibleNavItems = NAV_ITEMS.filter((item) => item !== "User Guide For Student");
+
   const getAllowedNavItems = (role) => {
-    if (role === "admin") return visibleNavItems;
-    if (role === "teacher") return visibleNavItems.filter((item) => item !== "User Management");
+    if (role === "admin") {
+      return visibleNavItems.filter(
+        (item) => !["My Schedule", "Register Schedule"].includes(item)
+      );
+    }
+    if (role === "teacher") {
+      return visibleNavItems.filter(
+        (item) => !["User Management", "Grade", "Semester", "Scheduling", "Saved Schedules"].includes(item)
+      );
+    }
     if (role === "student") {
-      return visibleNavItems.filter((item) => item !== "User Management" && item !== "Grade");
+      return visibleNavItems.filter(
+        (item) => ["My Schedule", "Change password"].includes(item)
+      );
     }
     return visibleNavItems.filter((item) => item !== "User Management");
   };
@@ -46,8 +63,12 @@ export default function App() {
     const dict = {
       "Grade": "Thông tin",
       "Scheduling": "Xếp lịch",
+      "Saved Schedules": "Lịch đã lưu",
+      "My Schedule": "Lịch của tôi",
+      "Register Schedule": "Đăng ký lịch",
+      "Semester": "Học kỳ",
       "Change password": "Đổi mật khẩu",
-      "User Management": "Tạo tài khoản nguoi dung",
+      "User Management": "Tạo tài khoản người dùng",
       "User Guide For Student": "Hướng dẫn cho Sinh viên"
     };
     return dict[item] || item;
@@ -57,7 +78,12 @@ export default function App() {
     setUser(loggedInUser);
     const role = normalizeRole(loggedInUser?.role);
     const allowed = getAllowedNavItems(role);
-    const preferred = role === "admin" ? "User Management" : "Scheduling";
+    // Default page per role
+    let preferred;
+    if (role === "admin") preferred = "User Management";
+    else if (role === "teacher") preferred = "My Schedule";
+    else if (role === "student") preferred = "My Schedule";
+    else preferred = "Scheduling";
     setActivePage(allowed.includes(preferred) ? preferred : allowed[0]);
   };
 
@@ -117,7 +143,27 @@ export default function App() {
           <GradeForm user={user} language={language} />
         )}
         {activePage === "Scheduling" && allowedNavItems.includes("Scheduling") && (
-          <SchedulingSystem user={user} language={language} />
+          <SchedulingSystem user={user} language={language} initialScenarioId={initialScenarioId} />
+        )}
+        {activePage === "My Schedule" && allowedNavItems.includes("My Schedule") && (
+          role === "student"
+            ? <StudentDashboard user={user} language={language} />
+            : <LecturerDashboard user={user} language={language} />
+        )}
+        {activePage === "Register Schedule" && allowedNavItems.includes("Register Schedule") && (
+          <LecturerConstraints user={user} language={language} />
+        )}
+        {activePage === "Saved Schedules" && isAdmin && allowedNavItems.includes("Saved Schedules") && (
+          <ScheduleListManager
+            language={language}
+            onOpenSchedule={(id) => {
+              setInitialScenarioId(String(id));
+              setActivePage("Scheduling");
+            }}
+          />
+        )}
+        {activePage === "Semester" && isAdmin && allowedNavItems.includes("Semester") && (
+          <SemesterManager user={user} language={language} />
         )}
         {activePage === "Change password" && allowedNavItems.includes("Change password") && (
           <ChangePassword user={user} language={language} />

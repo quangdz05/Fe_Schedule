@@ -380,8 +380,8 @@ const LessonCard = memo(({
 
 /* ═══════════════ MAIN COMPONENT ═══════════════ */
 
-export default function SchedulingSystem() {
-  const [scenarioId, setScenarioId] = useState("");
+export default function SchedulingSystem({ initialScenarioId }) {
+  const [scenarioId, setScenarioId] = useState(initialScenarioId || "");
   const [sessionId, setSessionId] = useState(null);         // jobId từ /solve
   const [scheduleRaw, setScheduleRaw] = useState(null);
   const [lessons, setLessons] = useState([]);
@@ -475,6 +475,34 @@ export default function SchedulingSystem() {
   useEffect(() => {
     if (!majors.includes(selectedMajor)) setSelectedMajor("ALL");
   }, [majors, selectedMajor]);
+
+  // Auto-load when initialScenarioId prop changes (from "Saved Schedules" → Edit)
+  const prevInitialRef = useRef(null);
+  useEffect(() => {
+    if (initialScenarioId && initialScenarioId !== prevInitialRef.current) {
+      prevInitialRef.current = initialScenarioId;
+      setScenarioId(String(initialScenarioId));
+      // Trigger load after state update
+      setTimeout(async () => {
+        setIsLoadingData(true); setDataMessage(null); setSolveMessage(null);
+        try {
+          const result = await getScheduleResult(initialScenarioId);
+          const schedule = result?.schedule || result;
+          if (!schedule?.lessons) throw new Error("API không trả về dữ liệu hợp lệ.");
+          setScheduleRaw(schedule);
+          setLessons(buildLessonsFromSchedule(schedule, true));
+          setConflicts(schedule.conflicts || []);
+          setApiScore({ hard: schedule.hardScore ?? 0, soft: schedule.softScore ?? 0 });
+          setScenarioId(result?.scenarioId || String(initialScenarioId));
+          setScheduleState("solved");
+          setShowSectionPicker(false);
+          setDataMessage({ type: "success", text: `Đã tải ${schedule.lessons.length} lớp từ lịch #${initialScenarioId}.` });
+        } catch (err) {
+          setDataMessage({ type: "error", text: `Lỗi: ${err.message}` });
+        } finally { setIsLoadingData(false); }
+      }, 0);
+    }
+  }, [initialScenarioId]);
 
   const filteredLessons = useMemo(() => {
     let list = lessons;
